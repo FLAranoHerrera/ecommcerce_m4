@@ -1,8 +1,16 @@
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+
+@Entity()
 export class Product {
+  @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
   name: string;
-  description: string;
+
+  @Column('decimal')
   price: number;
-  stock: boolean;
-  imgUrl: string;
+
+  @Column()
+  description: string;
 }

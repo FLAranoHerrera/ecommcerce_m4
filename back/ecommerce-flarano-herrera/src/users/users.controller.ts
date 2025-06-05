@@ -1,13 +1,56 @@
-import { Controller, Get } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+  ParseIntPipe,
+  HttpCode,
+  HttpStatus,
+  Query,
+  DefaultValuePipe,
+  UseGuards
+} from '@nestjs/common';
+import { AuthGuard } from 'src/auth/auth.guard';
 import { UsersService } from './users.service';
-import { User } from '../entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
+@UseGuards(AuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  create(@Body() dto: CreateUserDto) {
+    return this.usersService.create(dto);
+  }
+  @UseGuards(AuthGuard)
   @Get()
-  getAllUsers(): User[] {
-    return this.usersService.findAll();
+findAll(
+  @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+  @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
+) {
+  return this.usersService.findAll(page, limit);
+}
+  @UseGuards(AuthGuard)
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.findOne(id);
+  }
+  
+  @UseGuards(AuthGuard)
+  @Put(':id')
+  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateUserDto) {
+    return this.usersService.update(id, dto);
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete(':id')
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.remove(id);
   }
 }
