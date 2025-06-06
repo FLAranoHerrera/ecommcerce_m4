@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import { SigninDto } from './dto/signin.dto';
+import { SigninDto } from '../dto/singin.dto';
 
 @Injectable()
 export class AuthService {

@@ -13,4 +13,10 @@ export class Product {
 
   @Column()
   description: string;
+
+  @Column()
+  stock: boolean;
+
+  @Column()
+  imgUrl: string;
 }
