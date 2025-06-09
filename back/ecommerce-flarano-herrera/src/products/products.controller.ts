@@ -40,19 +40,19 @@ findAll(
 
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  findOne(@Param('id') id: string) {
     return this.productsService.findOne(id);
   }
 
   @Put(':id')
   @UseGuards(AuthGuard)
-  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateProductDto) {
+  update(@Param('id') id: string, @Body() dto: UpdateProductDto) {
     return this.productsService.update(id, dto);
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard)
-  remove(@Param('id', ParseIntPipe) id: number) {
+  remove(@Param('id') id: string) {
     return this.productsService.remove(id);
   }
 }

@@ -15,7 +15,7 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException('Authorization header missing');
     }
 
-    // Validamos estructura: "Basic: email:password"
+    // Validar estructura: "Basic: email:password"
     const [prefix, credentials] = authHeader.split(' ');
     if (prefix !== 'Basic:' || !credentials || !credentials.includes(':')) {
       throw new UnauthorizedException('Invalid Authorization format');

@@ -33,20 +33,20 @@ export class ProductsService {
 }
 
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const product = await this.productsRepository.findOneBy({ id });
     if (!product) throw new NotFoundException('Product not found');
     return product;
   }
 
-  async update(id: number, dto: UpdateProductDto) {
+  async update(id: string, dto: UpdateProductDto) {
     await this.productsRepository.update(id, dto);
     const updated = await this.productsRepository.findOneBy({ id });
     if (!updated) throw new NotFoundException('Product not found');
     return { id: updated.id };
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const result = await this.productsRepository.delete(id);
     if (result.affected === 0) throw new NotFoundException('Product not found');
     return { id };

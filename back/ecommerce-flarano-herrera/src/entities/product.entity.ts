@@ -1,22 +1,38 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
+import { Category } from './category.entity';
+import { OrderDetail } from './orderDetail.entity';
 
-@Entity()
+@Entity('products')
 export class Product {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @Column()
+  @Column({ length: 50 })
   name: string;
 
-  @Column('decimal')
-  price: number;
-
-  @Column()
+  @Column('text')
   description: string;
 
-  @Column()
-  stock: boolean;
+  @Column('decimal', { precision: 10, scale: 2 })
+  price: number;
 
-  @Column()
+  @Column('int')
+  stock: number;
+
+  @Column({ default: 'https://via.placeholder.com/150' })
   imgUrl: string;
+
+  @ManyToOne(() => Category, category => category.products)
+  category: Category;
+
+  @ManyToMany(() => OrderDetail, orderDetail => orderDetail.products)
+  @JoinTable()
+  orderDetails: OrderDetail[];
 }

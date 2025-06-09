@@ -1,36 +1,47 @@
+import { Product } from 'src/entities/product.entity';
+import { DataSource } from 'typeorm';
 import { Injectable } from '@nestjs/common';
-import { Product } from '../entities/product.entity';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class ProductsRepository {
-  private products: Product[] = [];
+  constructor(private dataSource: DataSource) {}
 
-  constructor() {
-    this.loadMockData();
+  async getProducts(): Promise<Product[]> {
+    return this.dataSource.getRepository(Product).find({
+      relations: ['category'],
+    });
   }
 
-  private loadMockData() {
-    this.products = [
+  async addProducts(): Promise<void> {
+    const repository = this.dataSource.getRepository(Product);
+
+    const existingProducts = await repository.find();
+    if (existingProducts.length > 0) return;
+
+    const defaultCategoryId = 'ac5d7f4d-65ea-4e9c-8aae-a52f3fb807bc'; // ID real de categoría a vincular
+
+    const products: Partial<Product>[] = [
       {
-        id: 1,
-        name: 'Laptop',
-        description: 'High-end laptop',
-        price: 1500,
-        stock: true,
-        imgUrl: 'https://example.com/laptop.jpg',
+        id: uuidv4(),
+        name: 'Camisa básica',
+        description: 'Camisa de algodón, cómoda para el día a día.',
+        price: 29.99,
+        stock: 50,
+        imgUrl: '',
+        category: { id: defaultCategoryId } as any,
       },
       {
-        id: 2,
-        name: 'Phone',
-        description: 'Smartphone with OLED screen',
-        price: 800,
-        stock: false,
-        imgUrl: 'https://example.com/phone.jpg',
+        id: uuidv4(),
+        name: 'Pantalón jean',
+        description: 'Pantalón de mezclilla azul oscuro.',
+        price: 59.99,
+        stock: 30,
+        imgUrl: '',
+        category: { id: defaultCategoryId } as any,
       },
     ];
-  }
 
-  findAll(): Product[] {
-    return this.products;
+    await repository.save(products);
   }
 }
