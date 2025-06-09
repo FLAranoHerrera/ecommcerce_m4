@@ -18,7 +18,6 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
 
-@UseGuards(AuthGuard)
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
@@ -30,16 +29,22 @@ export class ProductsController {
     return this.productsService.create(dto);
   }
 
- @Get()
-findAll(
-  @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
-  @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
-) {
-  return this.productsService.findAll(page, limit);
-}
+  @Get()
+  @UseGuards(AuthGuard)
+  findAll(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
+  ) {
+    return this.productsService.findAll(page, limit);
+  }
 
+  @Get('seeder')
+  async seedProducts() {
+    return await this.productsService.seedProducts();
+  }
 
   @Get(':id')
+  @UseGuards(AuthGuard)
   findOne(@Param('id') id: string) {
     return this.productsService.findOne(id);
   }

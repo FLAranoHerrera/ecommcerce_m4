@@ -4,12 +4,15 @@ import { Repository } from 'typeorm';
 import { Product } from '../entities/product.entity';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
+import { productsSeed } from '../seeds/products.seed';
+import { CategoriesService } from '../categories/categories.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private productsRepository: Repository<Product>,
+    private categoriesService: CategoriesService,
   ) {}
 
   async create(dto: CreateProductDto) {
@@ -50,5 +53,29 @@ export class ProductsService {
     const result = await this.productsRepository.delete(id);
     if (result.affected === 0) throw new NotFoundException('Product not found');
     return { id };
+  }
+
+  async seedProducts(): Promise<{ message: string }> {
+    const created: string[] = [];
+
+    for (const productData of productsSeed) {
+      const exists = await this.productsRepository.findOneBy({ name: productData.name });
+      if (!exists) {
+        // Buscar o crear la categoría
+        const category = await this.categoriesService.findOrCreateCategory(productData.category);
+        
+        const product = this.productsRepository.create({
+          ...productData,
+          category: { id: category.id }
+        });
+        
+        await this.productsRepository.save(product);
+        created.push(product.name);
+      }
+    }
+
+    return {
+      message: `Se cargaron ${created.length} productos.`,
+    };
   }
 }

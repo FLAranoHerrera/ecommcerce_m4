@@ -31,4 +31,15 @@ export class CategoriesService {
       message: `Se cargaron ${created.length} categorías.`,
     };
   }
+
+  async findOrCreateCategory(name: string): Promise<Category> {
+    let category = await this.categoryRepository.findOneBy({ name });
+    
+    if (!category) {
+      category = this.categoryRepository.create({ name });
+      await this.categoryRepository.save(category);
+    }
+    
+    return category;
+  }
 }

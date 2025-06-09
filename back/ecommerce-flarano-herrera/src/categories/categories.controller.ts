@@ -10,8 +10,7 @@ export class CategoriesController {
     return await this.categoriesService.getCategories();
   }
 
-  @Post('seeder')
-  @HttpCode(HttpStatus.CREATED)
+  @Get('seeder')
   async seedCategories() {
     return await this.categoriesService.seedCategories();
   }

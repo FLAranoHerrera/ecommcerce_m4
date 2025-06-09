@@ -16,6 +16,7 @@ export const typeOrmConfigAsync = {
     username: configService.get<string>('DB_USERNAME'),
     password: String(configService.get('DB_PASSWORD') ?? ''),
     database: configService.get<string>('DB_NAME'),
+    dropSchema: true,
     entities: [User, Product, Category, Order, OrderDetail],
     synchronize: true,
     logging: true,

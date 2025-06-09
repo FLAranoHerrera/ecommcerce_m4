@@ -4,9 +4,13 @@ import { ProductsController } from './products.controller';
 import { ProductsService } from './products.service';
 import { ProductsRepository } from 'src/repositories/products.repository';
 import { Product } from 'src/entities/product.entity';
+import { CategoriesModule } from '../categories/categories.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Product])],
+  imports: [
+    TypeOrmModule.forFeature([Product]),
+    CategoriesModule
+  ],
   controllers: [ProductsController],
   providers: [ProductsService, ProductsRepository],
 })
