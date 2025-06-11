@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { OrdersModule } from './orders/orders.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { typeOrmConfigAsync } from './config/typeorm.config';
+import { FilesModule } from './files/files.module';
 
 
 @Module({
@@ -20,6 +21,7 @@ import { typeOrmConfigAsync } from './config/typeorm.config';
     UsersModule,
     AuthModule,
     OrdersModule,
+    FilesModule,
   ],
 })
 export class AppModule implements NestModule {
