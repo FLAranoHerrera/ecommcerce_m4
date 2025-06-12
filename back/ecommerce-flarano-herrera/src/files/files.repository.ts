@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Product } from '../entities/product.entity'; 
+import { Product } from '../entities/product.entity';
 
 @Injectable()
 export class FilesRepository {
@@ -10,13 +10,12 @@ export class FilesRepository {
     private readonly productRepository: Repository<Product>,
   ) {}
 
-  async updateProductImage(productId: string, imageUrl: string): Promise<Product> {
+  async updateProductImage(productId: string, imageUrl: string) {
     const product = await this.productRepository.findOneBy({ id: productId });
-
     if (!product) {
       throw new Error('Producto no encontrado');
     }
-
+    
     product.imgUrl = imageUrl;
     return this.productRepository.save(product);
   }

@@ -20,7 +20,6 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UuidPipe } from '../pipes/uuid.pipe';
 
-@UseGuards(AuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -32,6 +31,7 @@ export class UsersController {
   }
 
   @Get()
+  @UseGuards(AuthGuard)
   findAll(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
@@ -46,11 +46,13 @@ export class UsersController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard)
   findOne(@Param('id', UuidPipe) id: string) {
     return this.usersService.findOne(id);
   }
   
   @Put(':id')
+  @UseGuards(AuthGuard)
   update(
     @Param('id', UuidPipe) id: string,
     @Body() dto: UpdateUserDto
@@ -59,6 +61,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard)
   remove(@Param('id', UuidPipe) id: string) {
     return this.usersService.remove(id);
   }

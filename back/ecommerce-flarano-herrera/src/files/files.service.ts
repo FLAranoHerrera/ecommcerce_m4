@@ -1,7 +1,7 @@
 import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import { FilesRepository } from './files.repository';
 import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
-import { Express } from 'express';
+import { Multer } from 'multer';
 import * as streamifier from 'streamifier';
 
 @Injectable()
@@ -24,6 +24,7 @@ export class FilesService {
         },
         (error, result) => {
           if (error) return reject(error);
+          if (!result) return reject(new Error('No se recibió respuesta de Cloudinary'));
           resolve(result);
         },
       );
