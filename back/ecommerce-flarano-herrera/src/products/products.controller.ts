@@ -13,8 +13,11 @@ import {
   DefaultValuePipe,
   UseGuards,
   BadRequestException,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { AuthGuard } from '../auth/auth.guard';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
@@ -64,6 +67,16 @@ export class ProductsController {
     @Body() dto: UpdateProductDto
   ) {
     return this.productsService.update(id, dto);
+  }
+
+  @Post('uploadImage/:productId')
+  @UseGuards(AuthGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadImage(
+    @Param('productId', UuidPipe) productId: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.productsService.uploadImage(productId, file);
   }
 
   @Delete(':id')

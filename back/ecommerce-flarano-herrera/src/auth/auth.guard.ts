@@ -4,31 +4,43 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { Request } from 'express';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  canActivate(context: ExecutionContext): boolean {
+  constructor(private jwtService: JwtService) {}
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const authHeader = request.headers['authorization'];
+    const token = this.extractTokenFromHeader(request);
 
-    if (!authHeader) {
-      throw new UnauthorizedException('Authorization header missing');
+    if (!token) {
+      throw new UnauthorizedException('Token no proporcionado');
     }
 
-    // Validar estructura: "Basic base64(email:password)"
-    const [prefix, base64Credentials] = authHeader.split(' ');
-    if (prefix !== 'Basic' || !base64Credentials) {
-      throw new UnauthorizedException('Invalid Authorization format');
-    }
+    try {
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_SECRET || 'super-secret',
+      });
 
-    const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
-    const [email, password] = credentials.split(':');
-    
-    if (!email || !password) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
+      // Adjuntar la información del payload a la request
+      request['user'] = payload;
+      
+      // Verificar si el token ha expirado
+      const expirationTime = payload.exp * 1000; // Convertir a milisegundos
+      if (Date.now() >= expirationTime) {
+        throw new UnauthorizedException('Token expirado');
+      }
 
-    // Podríamos inyectar usuario aquí si quisiéramos
-    return true;
+      return true;
+    } catch (error) {
+      throw new UnauthorizedException('Token inválido');
+    }
+  }
+
+  private extractTokenFromHeader(request: Request): string | undefined {
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
   }
 }

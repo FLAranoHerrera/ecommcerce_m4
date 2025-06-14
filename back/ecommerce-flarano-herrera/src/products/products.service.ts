@@ -6,6 +6,7 @@ import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { productsSeed } from '../seeds/products.seed';
 import { CategoriesService } from '../categories/categories.service';
+import { FilesService } from '../files/files.service';
 
 @Injectable()
 export class ProductsService {
@@ -13,6 +14,7 @@ export class ProductsService {
     @InjectRepository(Product)
     private productsRepository: Repository<Product>,
     private categoriesService: CategoriesService,
+    private filesService: FilesService,
   ) {}
 
   async create(dto: CreateProductDto) {
@@ -22,19 +24,18 @@ export class ProductsService {
   }
 
   async findAll(page = 1, limit = 5) {
-  const [products, total] = await this.productsRepository.findAndCount({
-    skip: (page - 1) * limit,
-    take: limit,
-  });
+    const [products, total] = await this.productsRepository.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit,
+    });
 
-  return {
-    data: products,
-    page,
-    limit,
-    total,
-  };
-}
-
+    return {
+      data: products,
+      page,
+      limit,
+      total,
+    };
+  }
 
   async findOne(id: string) {
     const product = await this.productsRepository.findOneBy({ id });
@@ -53,6 +54,10 @@ export class ProductsService {
     const result = await this.productsRepository.delete(id);
     if (result.affected === 0) throw new NotFoundException('Product not found');
     return { id };
+  }
+
+  async uploadImage(productId: string, file: Express.Multer.File) {
+    return this.filesService.uploadProductImage(productId, file);
   }
 
   async seedProducts(): Promise<{ message: string }> {
