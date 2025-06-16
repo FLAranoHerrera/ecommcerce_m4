@@ -32,6 +32,9 @@ export class User {
   @Column({ length: 50, nullable: true })
   city: string;
 
+  @Column({ type: 'boolean', default: false })
+  admin: boolean;
+
   @OneToMany(() => Order, order => order.user)
   orders: Order[];
 }

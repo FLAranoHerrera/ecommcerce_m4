@@ -61,8 +61,12 @@ export class AuthService {
         throw new UnauthorizedException('Credenciales inválidas');
       }
 
-      // Generar token JWT
-      const payload = { sub: user.id, email: user.email };
+      // Generar token JWT con el rol admin
+      const payload = { 
+        sub: user.id, 
+        email: user.email,
+        admin: user.admin 
+      };
       const token = await this.jwtService.signAsync(payload);
 
       // Devolver usuario sin password y el token
