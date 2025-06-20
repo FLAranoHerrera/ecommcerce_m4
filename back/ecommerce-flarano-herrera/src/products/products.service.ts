@@ -66,7 +66,7 @@ export class ProductsService {
     for (const productData of productsSeed) {
       const exists = await this.productsRepository.findOneBy({ name: productData.name });
       if (!exists) {
-        // Buscar o crear la categoría
+      
         const category = await this.categoriesService.findOrCreateCategory(productData.category);
         
         const product = this.productsRepository.create({

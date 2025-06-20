@@ -25,7 +25,10 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { UuidPipe } from '../pipes/uuid.pipe';
+import { ApiBearerAuth, ApiUnauthorizedResponse, ApiForbiddenResponse } from '@nestjs/swagger';
 
+@ApiBearerAuth('JWT-auth')
+@ApiUnauthorizedResponse({ description: 'No autorizado. Token JWT inválido o ausente.' })
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
@@ -33,6 +36,7 @@ export class ProductsController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @UseGuards(AuthGuard)
+  @ApiForbiddenResponse({ description: 'No tiene permisos para acceder a este recurso.' })
   create(@Body() dto: CreateProductDto) {
     return this.productsService.create(dto);
   }
@@ -66,6 +70,7 @@ export class ProductsController {
   @Put(':id')
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
+  @ApiForbiddenResponse({ description: 'No tiene permisos para acceder a este recurso.' })
   update(
     @Param('id', UuidPipe) id: string,
     @Body() dto: UpdateProductDto

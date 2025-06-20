@@ -22,7 +22,10 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UuidPipe } from '../pipes/uuid.pipe';
+import { ApiBearerAuth, ApiUnauthorizedResponse, ApiForbiddenResponse } from '@nestjs/swagger';
 
+@ApiBearerAuth('JWT-auth')
+@ApiUnauthorizedResponse({ description: 'No autorizado. Token JWT inválido o ausente.' })
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -36,6 +39,7 @@ export class UsersController {
   @Get()
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
+  @ApiForbiddenResponse({ description: 'No tiene permisos para acceder a este recurso.' })
   findAll(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
@@ -67,6 +71,7 @@ export class UsersController {
   @Delete(':id')
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
+  @ApiForbiddenResponse({ description: 'No tiene permisos para acceder a este recurso.' })
   remove(@Param('id', UuidPipe) id: string) {
     return this.usersService.remove(id);
   }

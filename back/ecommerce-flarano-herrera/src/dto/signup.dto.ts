@@ -7,17 +7,35 @@ import {
   MinLength,
   Matches,
 } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class SignupDto {
+  @ApiProperty({
+    description: 'Nombre completo del usuario',
+    example: 'Juan Pérez',
+    minLength: 3,
+    maxLength: 80
+  })
   @IsString()
   @IsNotEmpty()
   @MinLength(3)
   @MaxLength(80)
   name: string;
 
+  @ApiProperty({
+    description: 'Correo electrónico del usuario',
+    example: 'juan.perez@ejemplo.com',
+    format: 'email'
+  })
   @IsEmail()
   email: string;
 
+  @ApiProperty({
+    description: 'Contraseña del usuario (8-15 caracteres, debe incluir mayúsculas, minúsculas, números y caracteres especiales)',
+    example: 'Password123!',
+    minLength: 8,
+    maxLength: 15
+  })
   @IsString()
   @IsNotEmpty()
   @MinLength(8)
@@ -30,6 +48,12 @@ export class SignupDto {
   )
   password: string;
 
+  @ApiProperty({
+    description: 'Confirmación de la contraseña',
+    example: 'Password123!',
+    minLength: 8,
+    maxLength: 15
+  })
   @IsString()
   @IsNotEmpty()
   @MinLength(8)
@@ -42,22 +66,45 @@ export class SignupDto {
   )
   confirmPassword: string;
 
+  @ApiProperty({
+    description: 'Dirección del usuario',
+    example: 'Calle Principal 123',
+    minLength: 3,
+    maxLength: 80
+  })
   @IsString()
   @IsNotEmpty()
   @MinLength(3)
   @MaxLength(80)
   address: string;
 
+  @ApiProperty({
+    description: 'Número de teléfono del usuario',
+    example: 1234567890,
+    type: 'number'
+  })
   @IsNumber()
   @IsNotEmpty()
   phone: number;
 
+  @ApiProperty({
+    description: 'País del usuario',
+    example: 'México',
+    minLength: 5,
+    maxLength: 20
+  })
   @IsString()
   @IsNotEmpty()
   @MinLength(5)
   @MaxLength(20)
   country: string;
 
+  @ApiProperty({
+    description: 'Ciudad del usuario',
+    example: 'Ciudad de México',
+    minLength: 5,
+    maxLength: 20
+  })
   @IsString()
   @IsNotEmpty()
   @MinLength(5)

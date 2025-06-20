@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FilesController } from './files.controller';
 import { FilesService } from './files.service';
@@ -10,10 +10,11 @@ import { Product } from '../entities/product.entity';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Product]),
-    ProductsModule,
+    forwardRef(() => ProductsModule),
     CloudinaryModule
   ],
   controllers: [FilesController],
   providers: [FilesService, FilesRepository],
+  exports: [FilesService]
 })
 export class FilesModule {}

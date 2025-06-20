@@ -13,7 +13,10 @@ import { AuthGuard } from '../auth/auth.guard';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from '../dto/create-order.dto';
 import { UuidPipe } from '../pipes/uuid.pipe';
+import { ApiBearerAuth, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
+@ApiBearerAuth('JWT-auth')
+@ApiUnauthorizedResponse({ description: 'No autorizado. Token JWT inválido o ausente.' })
 @UseGuards(AuthGuard)
 @Controller('orders')
 export class OrdersController {

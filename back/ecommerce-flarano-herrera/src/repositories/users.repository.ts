@@ -12,30 +12,7 @@ export class UsersRepository {
   }
 
   private loadMockData() {
-    this.users = [
-      {
-        id: '1',
-        email: 'john@example.com',
-        name: 'John Doe',
-        password: '123456',
-        address: '123 Main St',
-        phone: 5551234,
-        country: 'USA',
-        city: 'New York',
-        orders: []
-      },
-      {
-        id: '2',
-        email: 'jane@example.com',
-        name: 'Jane Smith',
-        password: 'abcdef',
-        address: '456 Side St',
-        phone: 5555678,
-        country: 'USA',
-        city: 'Los Angeles',
-        orders: []
-      },
-    ];
+    this.users = [];
   }
 
   findAll(): User[] {

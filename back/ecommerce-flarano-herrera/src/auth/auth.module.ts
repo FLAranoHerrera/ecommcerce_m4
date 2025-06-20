@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UsersModule } from '../users/users.module';
@@ -8,7 +8,7 @@ import { RolesGuard } from './roles/roles.guard';
 
 @Module({
   imports: [
-    UsersModule,
+    forwardRef(() => UsersModule),
     JwtModule.register({
       secret: process.env.JWT_SECRET || 'super-secret',
       signOptions: { expiresIn: '1h' },
@@ -16,6 +16,6 @@ import { RolesGuard } from './roles/roles.guard';
   ],
   controllers: [AuthController],
   providers: [AuthService, AuthGuard, RolesGuard],
-  exports: [AuthGuard, RolesGuard],
+  exports: [AuthGuard, RolesGuard, JwtModule],
 })
 export class AuthModule {}
