@@ -15,34 +15,17 @@ export class AuthService {
   async signup(dto: SignupDto) {
     const { email, password, confirmPassword, ...userData } = dto;
 
-    // Verificar que las contraseñas coincidan
     if (password !== confirmPassword) {
       throw new BadRequestException('Las contraseñas no coinciden');
     }
 
-    // Verificar si el usuario ya existe
     const existingUser = await this.usersService.findByEmail(email);
     if (existingUser) {
       throw new BadRequestException('El usuario ya existe');
     }
 
-    // Hashear la contraseña
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await this.usersService.create(dto);
 
-    // Crear el usuario
-    const { id } = await this.usersService.create({
-      ...userData,
-      email,
-      password: hashedPassword,
-    });
-
-    // Obtener el usuario completo
-    const user = await this.usersService.findByEmail(email);
-    if (!user) {
-      throw new BadRequestException('Error al crear el usuario');
-    }
-
-    // Devolver el usuario sin la contraseña
     const { password: _, ...result } = user;
     return result;
   }
@@ -61,7 +44,6 @@ export class AuthService {
         throw new UnauthorizedException('Credenciales inválidas');
       }
 
-      // Generar token JWT con el rol admin
       const payload = { 
         sub: user.id, 
         email: user.email,
@@ -69,7 +51,6 @@ export class AuthService {
       };
       const token = await this.jwtService.signAsync(payload);
 
-      // Devolver usuario sin password y el token
       const { password: _, ...userData } = user;
       return {
         user: userData,

@@ -2,23 +2,29 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
-import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
-import { UsersRepository } from '../repositories/users.repository';
 import { UserWithOrders } from '../types/user.types';
+import * as bcrypt from 'bcrypt';
+import { SignupDto } from 'src/dto/signup.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-    private usersRepo: UsersRepository,
   ) {}
 
-  async create(dto: CreateUserDto) {
-    const newUser = this.usersRepository.create(dto);
-    const saved = await this.usersRepository.save(newUser);
-    return { id: saved.id };
+  async create(signupDto: SignupDto): Promise<User> {
+    const { password, email, ...userData } = signupDto;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    const newUser = this.usersRepository.create({
+      ...userData,
+      email,
+      password: hashedPassword,
+    });
+    
+    return this.usersRepository.save(newUser);
   }
 
   async findAll(page = 1, limit = 5) {
@@ -43,7 +49,18 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<UserWithOrders> {
-    return this.usersRepo.findOneWithOrders(id);
+    const user = await this.usersRepository.findOne({
+      where: { id },
+      relations: {
+        orders: true,
+      },
+    });
+    if (!user) throw new NotFoundException('User not found');
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...userWithoutPassword } = user;
+
+    return userWithoutPassword;
   }
 
   async update(id: string, dto: UpdateUserDto) {

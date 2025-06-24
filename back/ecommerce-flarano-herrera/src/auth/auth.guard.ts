@@ -24,11 +24,10 @@ export class AuthGuard implements CanActivate {
         secret: process.env.JWT_SECRET || 'super-secret',
       });
 
-      // Adjuntar la información del payload a la request
+    
       request['user'] = payload;
-      
-      // Verificar si el token ha expirado
-      const expirationTime = payload.exp * 1000; // Convertir a milisegundos
+    
+      const expirationTime = payload.exp * 1000;
       if (Date.now() >= expirationTime) {
         throw new UnauthorizedException('Token expirado');
       }

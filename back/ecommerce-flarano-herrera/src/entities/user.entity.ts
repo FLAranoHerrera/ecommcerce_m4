@@ -17,19 +17,19 @@ export class User {
   @Column({ length: 50, unique: true })
   email: string;
 
-  @Column({ length: 20 })
+  @Column({ length: 100 })
   password: string;
 
-  @Column({ type: 'int', nullable: true })
+  @Column({ type: 'bigint', nullable: true })
   phone: number;
 
-  @Column({ length: 50, nullable: true })
+  @Column({ type: 'varchar', length: 50, nullable: true })
   country: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: 'varchar', length: 50, nullable: true })
   address: string;
 
-  @Column({ length: 50, nullable: true })
+  @Column({ type: 'varchar', length: 50, nullable: true })
   city: string;
 
   @Column({ type: 'boolean', default: false })

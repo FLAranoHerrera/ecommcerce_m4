@@ -1,14 +1,11 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Param,
   Put,
   Delete,
   ParseIntPipe,
-  HttpCode,
-  HttpStatus,
   Query,
   DefaultValuePipe,
   UseGuards,
@@ -19,7 +16,6 @@ import { RolesGuard } from 'src/auth/roles/roles.guard';
 import { Roles } from 'src/auth/roles/roles.decorator';
 import { Role } from 'src/auth/roles/roles.enum';
 import { UsersService } from './users.service';
-import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UuidPipe } from '../pipes/uuid.pipe';
 import { ApiBearerAuth, ApiUnauthorizedResponse, ApiForbiddenResponse } from '@nestjs/swagger';
@@ -29,12 +25,6 @@ import { ApiBearerAuth, ApiUnauthorizedResponse, ApiForbiddenResponse } from '@n
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  create(@Body() dto: CreateUserDto) {
-    return this.usersService.create(dto);
-  }
 
   @Get()
   @UseGuards(AuthGuard, RolesGuard)

@@ -13,8 +13,6 @@ import {
   DefaultValuePipe,
   UseGuards,
   BadRequestException,
-  UseInterceptors,
-  UploadedFile,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '../auth/auth.guard';
@@ -78,15 +76,15 @@ export class ProductsController {
     return this.productsService.update(id, dto);
   }
 
-  @Post('uploadImage/:productId')
-  @UseGuards(AuthGuard)
-  @UseInterceptors(FileInterceptor('file'))
-  async uploadImage(
-    @Param('productId', UuidPipe) productId: string,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    return this.productsService.uploadImage(productId, file);
-  }
+  // @Post('uploadImage/:productId')
+  // @UseGuards(AuthGuard)
+  // @UseInterceptors(FileInterceptor('file'))
+  // async uploadImage(
+  //   @Param('productId', UuidPipe) productId: string,
+  //   @UploadedFile() file: Express.Multer.File,
+  // ) {
+  //   return this.productsService.uploadImage(productId, file);
+  // }
 
   @Delete(':id')
   @UseGuards(AuthGuard)
