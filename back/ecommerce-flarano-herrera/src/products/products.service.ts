@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from '../entities/product.entity';
@@ -44,10 +44,16 @@ export class ProductsService {
   }
 
   async update(id: string, dto: UpdateProductDto) {
-    await this.productsRepository.update(id, dto);
-    const updated = await this.productsRepository.findOneBy({ id });
-    if (!updated) throw new NotFoundException('Product not found');
-    return { id: updated.id };
+    try {
+      const result = await this.productsRepository.update(id, dto);
+      if (result.affected === 0) throw new NotFoundException('Producto no encontrado');
+      const updated = await this.productsRepository.findOneBy({ id });
+      if (!updated) throw new NotFoundException('Producto no encontrado tras actualizar');
+      return { id: updated.id };
+    } catch (error) {
+      if (error instanceof NotFoundException) throw error;
+      throw new BadRequestException(error.message || 'Error al actualizar el producto');
+    }
   }
 
   async remove(id: string) {

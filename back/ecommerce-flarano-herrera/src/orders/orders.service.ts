@@ -21,20 +21,17 @@ export class OrdersService {
   ) {}
 
   async addOrder(dto: CreateOrderDto) {
-    // Buscar usuario
     const user = await this.usersRepository.findOneBy({ id: dto.userId });
     if (!user) {
       throw new NotFoundException('Usuario no encontrado');
     }
 
-    // Crear orden
     const order = this.ordersRepository.create({
       user,
       date: new Date(),
     });
     const savedOrder = await this.ordersRepository.save(order);
 
-    // Buscar productos y calcular total
     let total = 0;
     const products = await Promise.all(
       dto.products.map(async (productDto) => {
@@ -45,12 +42,19 @@ export class OrdersService {
         if (product.stock <= 0) {
           throw new NotFoundException(`Producto ${product.name} sin stock disponible`);
         }
-        total += product.price;
+        const price = Number(product.price);
+        if (isNaN(price)) {
+          throw new Error(`El precio del producto ${product.name} no es un número válido`);
+        }
+        total += price;
         return product;
       }),
     );
 
-    // Crear detalle de orden
+    if (isNaN(total)) {
+      throw new Error('El total calculado no es un número válido');
+    }
+
     const orderDetail = this.orderDetailsRepository.create({
       order: savedOrder,
       price: total,
@@ -58,7 +62,7 @@ export class OrdersService {
     });
     const savedOrderDetail = await this.orderDetailsRepository.save(orderDetail);
 
-    // Actualizar stock de productos
+    
     await Promise.all(
       products.map(async (product) => {
         product.stock -= 1;

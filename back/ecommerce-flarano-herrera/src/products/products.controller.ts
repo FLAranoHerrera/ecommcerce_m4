@@ -65,6 +65,7 @@ export class ProductsController {
     return this.productsService.findOne(id);
   }
 
+  /*
   @Put(':id')
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
@@ -75,6 +76,7 @@ export class ProductsController {
   ) {
     return this.productsService.update(id, dto);
   }
+  */
 
   // @Post('uploadImage/:productId')
   // @UseGuards(AuthGuard)
