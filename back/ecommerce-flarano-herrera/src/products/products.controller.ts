@@ -23,23 +23,29 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { UuidPipe } from '../pipes/uuid.pipe';
-import { ApiBearerAuth, ApiUnauthorizedResponse, ApiForbiddenResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiUnauthorizedResponse, ApiForbiddenResponse, ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 
 @ApiBearerAuth('JWT-auth')
 @ApiUnauthorizedResponse({ description: 'No autorizado. Token JWT inválido o ausente.' })
+@ApiTags('products')
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Crear productos, solo admin '})
   @HttpCode(HttpStatus.CREATED)
   @UseGuards(AuthGuard)
+  @ApiResponse({ status: 201, description: 'Producto creado exitosamente' })
   @ApiForbiddenResponse({ description: 'No tiene permisos para acceder a este recurso.' })
   create(@Body() dto: CreateProductDto) {
     return this.productsService.create(dto);
   }
 
   @Get()
+  @ApiOperation({ summary: 'Obtener paginado de productos' })
+  @ApiResponse({ status: 200, description: 'Paginas obtenidas exitosamente'})
+  @ApiResponse({ status: 404, description: 'Paginas no obtenidas'})
   @UseGuards(AuthGuard)
   findAll(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
@@ -55,11 +61,18 @@ export class ProductsController {
   }
 
   @Get('seeder')
+  @ApiOperation({ summary: 'Cargar productos de ejemplo' })
+  @ApiResponse({ status: 200, description: 'Productos de ejemplo cargados exitosamente' })
+  @ApiResponse({ status: 404, description: 'Productos no cargados.'})
   async seedProducts() {
     return await this.productsService.seedProducts();
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Obtener productos por su ID, solo admin'})
+  @ApiParam({ name: 'id', description: 'ID del producto'})
+  @ApiResponse({ status: 200, description: 'Prodcuto obtenido exitosamente'})
+  @ApiResponse({ status: 404, description: 'Producto no encontrado'})
   @UseGuards(AuthGuard)
   findOne(@Param('id', UuidPipe) id: string) {
     return this.productsService.findOne(id);
@@ -89,6 +102,9 @@ export class ProductsController {
   // }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Eliminar productos por ID, solo admin' })
+  @ApiResponse({ status: 200, description: 'Prodcuto eliminado exitosamente'})
+  @ApiResponse({ status: 404, description: 'Prodcuto no encontrado' })
   @UseGuards(AuthGuard)
   remove(@Param('id', UuidPipe) id: string) {
     return this.productsService.remove(id);
