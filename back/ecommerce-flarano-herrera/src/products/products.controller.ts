@@ -14,7 +14,6 @@ import {
   UseGuards,
   BadRequestException,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '../auth/auth.guard';
 import { RolesGuard } from '../auth/roles/roles.guard';
 import { Roles } from '../auth/roles/roles.decorator';
@@ -23,16 +22,17 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { UuidPipe } from '../pipes/uuid.pipe';
-import { ApiBearerAuth, ApiUnauthorizedResponse, ApiForbiddenResponse, ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiUnauthorizedResponse, ApiForbiddenResponse, ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
+import { privateDecrypt } from 'crypto';
 
-@ApiBearerAuth('JWT-auth')
-@ApiUnauthorizedResponse({ description: 'No autorizado. Token JWT inválido o ausente.' })
 @ApiTags('products')
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
+  @ApiBearerAuth('JWT-auth')
+  @ApiUnauthorizedResponse({ description: 'No autorizado. Token JWT inválido o ausente.' })
   @ApiOperation({ summary: 'Crear productos, solo admin '})
   @HttpCode(HttpStatus.CREATED)
   @UseGuards(AuthGuard)
@@ -46,7 +46,6 @@ export class ProductsController {
   @ApiOperation({ summary: 'Obtener paginado de productos' })
   @ApiResponse({ status: 200, description: 'Paginas obtenidas exitosamente'})
   @ApiResponse({ status: 404, description: 'Paginas no obtenidas'})
-  @UseGuards(AuthGuard)
   findAll(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
@@ -69,6 +68,8 @@ export class ProductsController {
   }
 
   @Get(':id')
+  @ApiBearerAuth('JWT-auth')
+  @ApiUnauthorizedResponse({ description: 'No autorizado. Token JWT inválido o ausente.' })
   @ApiOperation({ summary: 'Obtener productos por su ID, solo admin'})
   @ApiParam({ name: 'id', description: 'ID del producto'})
   @ApiResponse({ status: 200, description: 'Prodcuto obtenido exitosamente'})
@@ -78,30 +79,44 @@ export class ProductsController {
     return this.productsService.findOne(id);
   }
 
-  /*
+  
   @Put(':id')
+  @ApiBearerAuth('JWT-auth')
+  @ApiUnauthorizedResponse({ description: 'No autorizado. Token JWT inválido o ausente.' })
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
+  @ApiOperation({ summary: 'Actualizar productos por su ID, solo admin'})
+  @ApiResponse({ status: 200, description: 'Producto actualizado exitosamente'})
+  @ApiResponse({ status: 404, description: 'Producto no encontrado'})
   @ApiForbiddenResponse({ description: 'No tiene permisos para acceder a este recurso.' })
+  @ApiBody({ 
+    type: UpdateProductDto,
+    description: 'Datos para actualizar el producto',
+    examples: { 
+      ejemplo: { 
+        summary: 'Ejemplo de actualizacion de producto',
+        value: { 
+          name: 'Nuevo nombre del proudcto',
+          price: 199.99,
+          stock: 100,
+          imgUrl: 'https://example.com/image.jpg',
+          categoryId: '123e4567-e89b-12d3-a456-426614174000'
+        }
+       }
+     }
+  })
   update(
     @Param('id', UuidPipe) id: string,
     @Body() dto: UpdateProductDto
   ) {
     return this.productsService.update(id, dto);
   }
-  */
+  
 
-  // @Post('uploadImage/:productId')
-  // @UseGuards(AuthGuard)
-  // @UseInterceptors(FileInterceptor('file'))
-  // async uploadImage(
-  //   @Param('productId', UuidPipe) productId: string,
-  //   @UploadedFile() file: Express.Multer.File,
-  // ) {
-  //   return this.productsService.uploadImage(productId, file);
-  // }
 
   @Delete(':id')
+  @ApiBearerAuth('JWT-auth')
+  @ApiUnauthorizedResponse({ description: 'No autorizado. Token JWT inválido o ausente.' })
   @ApiOperation({ summary: 'Eliminar productos por ID, solo admin' })
   @ApiResponse({ status: 200, description: 'Prodcuto eliminado exitosamente'})
   @ApiResponse({ status: 404, description: 'Prodcuto no encontrado' })

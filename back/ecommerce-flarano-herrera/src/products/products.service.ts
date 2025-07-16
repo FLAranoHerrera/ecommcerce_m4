@@ -6,7 +6,6 @@ import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { productsSeed } from '../seeds/products.seed';
 import { CategoriesService } from '../categories/categories.service';
-import { FilesService } from '../files/files.service';
 
 @Injectable()
 export class ProductsService {
@@ -14,7 +13,6 @@ export class ProductsService {
     @InjectRepository(Product)
     private productsRepository: Repository<Product>,
     private categoriesService: CategoriesService,
-    private filesService: FilesService,
   ) {}
 
   async create(dto: CreateProductDto) {
@@ -62,9 +60,6 @@ export class ProductsService {
     return { id };
   }
 
-  async uploadImage(productId: string, file: Express.Multer.File) {
-    return this.filesService.uploadProductImage(productId, file);
-  }
 
   async seedProducts(): Promise<{ message: string }> {
     const created: string[] = [];

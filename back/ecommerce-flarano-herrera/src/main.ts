@@ -15,8 +15,8 @@ async function bootstrap() {
   }));
   
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('E-commerce API')
-    .setDescription('API para el sistema de e-commerce')
+    .setTitle('E-commerce Proyecto M4')
+    .setDescription('API para el e-commerce de Frank')
     .setVersion('1.0.0')
     .addBearerAuth(
       {
@@ -36,7 +36,7 @@ async function bootstrap() {
     swaggerOptions: {
       persistAuthorization: true,
     },
-    customSiteTitle: 'E-commerce API Documentation',
+    customSiteTitle: 'Documentación del Ecommerce M4',
   });
 
   await app.listen(process.env.PORT ?? 3000);
