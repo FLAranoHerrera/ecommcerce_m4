@@ -32,6 +32,7 @@ export class UsersController {
   @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Listar todos los usuarios (solo admin)' })
   @ApiResponse({ status: 200, description: 'Lista de usuarios obtenida exitosamente.' })
+  @ApiResponse({ status: 404, description: 'Lista de usuarios no obtenida'})
   @ApiForbiddenResponse({ description: 'No tiene permisos para acceder a este recurso.' })
   findAll(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
@@ -48,7 +49,7 @@ export class UsersController {
 
   @Get(':id')
   @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Obtener usuario por ID, (solo admin)' })
+  @ApiOperation({ summary: 'Obtener usuario por ID' })
   @ApiParam({ name: 'id', description: 'ID del usuario' })
   @ApiResponse({ status: 200, description: 'Usuario encontrado.' })
   @ApiResponse({ status: 404, description: 'Usuario no encontrado.' })
@@ -58,7 +59,7 @@ export class UsersController {
   
   @Put(':id')
   @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Actualizar usuario por ID, (solo admin) ' })
+  @ApiOperation({ summary: 'Actualizar usuario por ID' })
   @ApiParam({ name: 'id', description: 'ID del usuario' })
   @ApiBody({
     type: UpdateUserDto,

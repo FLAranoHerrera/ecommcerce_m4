@@ -26,7 +26,11 @@ export class OrdersController {
   @Post()
   @ApiOperation({ summary: 'Crear orden de compra'})
   @ApiResponse({ status: 201, description: 'Orden de compra creada exitosamente.'})
-  @ApiResponse({ status: 404, description: 'Error al crear orden de compra'})
+  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
+  @ApiResponse({ status: 404, description: 'Producto con id {id} no encontrado' })
+  @ApiResponse({ status: 404, description: 'Producto {name} sin stock disponible' })
+  @ApiResponse({ status: 400, description: 'El precio del producto {name} no es un número válido' })
+  @ApiResponse({ status: 400, description: 'El total calculado no es un número válido' })
   @HttpCode(HttpStatus.CREATED)
   create(@Body() dto: CreateOrderDto) {
     if (!dto.products || dto.products.length === 0) {
@@ -38,7 +42,7 @@ export class OrdersController {
   @Get(':id')
   @ApiOperation({ summary: 'Obtener Ordenes de compra por ID'})
   @ApiResponse({ status: 200, description: 'Ordenes obtenidas exitosamente'})
-  @ApiResponse({ status: 404, description: 'Error al obtener las ordenes'})
+  @ApiResponse({ status: 404, description: 'Orden no encontrada' })
   findOne(@Param('id', UuidPipe) id: string) {
     return this.ordersService.getOrder(id);
   }

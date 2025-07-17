@@ -23,24 +23,13 @@ import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { UuidPipe } from '../pipes/uuid.pipe';
 import { ApiBearerAuth, ApiUnauthorizedResponse, ApiForbiddenResponse, ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
-import { privateDecrypt } from 'crypto';
 
 @ApiTags('products')
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  @Post()
-  @ApiBearerAuth('JWT-auth')
-  @ApiUnauthorizedResponse({ description: 'No autorizado. Token JWT inválido o ausente.' })
-  @ApiOperation({ summary: 'Crear productos, solo admin '})
-  @HttpCode(HttpStatus.CREATED)
-  @UseGuards(AuthGuard)
-  @ApiResponse({ status: 201, description: 'Producto creado exitosamente' })
-  @ApiForbiddenResponse({ description: 'No tiene permisos para acceder a este recurso.' })
-  create(@Body() dto: CreateProductDto) {
-    return this.productsService.create(dto);
-  }
+  
 
   @Get()
   @ApiOperation({ summary: 'Obtener paginado de productos' })
@@ -67,10 +56,24 @@ export class ProductsController {
     return await this.productsService.seedProducts();
   }
 
+  @Post()
+  @ApiBearerAuth('JWT-auth')
+  @ApiUnauthorizedResponse({ description: 'No autorizado. Token JWT inválido o ausente.' })
+  @ApiOperation({ summary: 'Crear productos, (solo admin)'})
+  @HttpCode(HttpStatus.CREATED)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiResponse({ status: 201, description: 'Producto creado exitosamente' })
+  @ApiResponse({ status: 400, description: 'Error al crear producto'})
+  @ApiForbiddenResponse({ description: 'No tiene permisos para acceder a este recurso.' })
+  create(@Body() dto: CreateProductDto) {
+    return this.productsService.create(dto);
+  }
+
   @Get(':id')
   @ApiBearerAuth('JWT-auth')
   @ApiUnauthorizedResponse({ description: 'No autorizado. Token JWT inválido o ausente.' })
-  @ApiOperation({ summary: 'Obtener productos por su ID, solo admin'})
+  @ApiOperation({ summary: 'Obtener productos por su ID'})
   @ApiParam({ name: 'id', description: 'ID del producto'})
   @ApiResponse({ status: 200, description: 'Prodcuto obtenido exitosamente'})
   @ApiResponse({ status: 404, description: 'Producto no encontrado'})
@@ -85,7 +88,7 @@ export class ProductsController {
   @ApiUnauthorizedResponse({ description: 'No autorizado. Token JWT inválido o ausente.' })
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  @ApiOperation({ summary: 'Actualizar productos por su ID, solo admin'})
+  @ApiOperation({ summary: 'Actualizar productos por su ID, (solo admin)'})
   @ApiResponse({ status: 200, description: 'Producto actualizado exitosamente'})
   @ApiResponse({ status: 404, description: 'Producto no encontrado'})
   @ApiForbiddenResponse({ description: 'No tiene permisos para acceder a este recurso.' })
@@ -117,10 +120,11 @@ export class ProductsController {
   @Delete(':id')
   @ApiBearerAuth('JWT-auth')
   @ApiUnauthorizedResponse({ description: 'No autorizado. Token JWT inválido o ausente.' })
-  @ApiOperation({ summary: 'Eliminar productos por ID, solo admin' })
+  @ApiOperation({ summary: 'Eliminar productos por ID, (solo admin)' })
   @ApiResponse({ status: 200, description: 'Prodcuto eliminado exitosamente'})
   @ApiResponse({ status: 404, description: 'Prodcuto no encontrado' })
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   remove(@Param('id', UuidPipe) id: string) {
     return this.productsService.remove(id);
   }
