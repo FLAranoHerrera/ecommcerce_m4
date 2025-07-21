@@ -4,6 +4,7 @@ import {
   Param,
   UploadedFile,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FilesService } from './files.service';
@@ -11,6 +12,10 @@ import { Express } from 'express';
 import { MaxFileSizePipe } from 'src/pipes/max-file-size.pipe';
 import { FileTypePipe } from 'src/pipes/file-type.pipe';
 import { ApiTags, ApiOperation, ApiResponse, ApiConsumes, ApiParam, ApiBody } from '@nestjs/swagger';
+import { RolesGuard } from 'src/auth/roles/roles.guard';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { Roles } from 'src/auth/roles/roles.decorator';
+import { Role } from 'src/auth/roles/roles.enum';
 
 @ApiTags('files')
 @Controller('files')
@@ -18,7 +23,9 @@ export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
   @Post('uploadImage/:id')
-  @ApiOperation({ summary: 'Subir imagen de producto (postman)' })
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiOperation({ summary: 'Subir imagen de producto (probar en postman)' })
   @ApiConsumes('multipart/form-data')
   @ApiParam({ name: 'id', description: 'ID del producto' })
   @ApiBody({
