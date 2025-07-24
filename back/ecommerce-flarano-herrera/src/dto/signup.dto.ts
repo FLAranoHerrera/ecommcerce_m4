@@ -22,6 +22,14 @@ export class SignupDto {
   @MaxLength(80)
   name: string;
 
+@ApiProperty({ 
+  description: 'fecha de nacimiento',
+  example: "2025-07-22"
+})
+  @IsString()
+  @IsNotEmpty()
+  birthday: string;
+
   @ApiProperty({
     description: 'Correo electrónico del usuario',
     example: 'juan.perez@ejemplo.com',

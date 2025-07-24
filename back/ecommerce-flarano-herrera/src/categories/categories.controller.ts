@@ -1,4 +1,4 @@
-import { Controller, Get, Post, HttpCode, HttpStatus, Param, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { UuidPipe } from 'src/pipes/uuid.pipe';

@@ -14,6 +14,9 @@ export class User {
   @Column({ length: 50 })
   name: string;
 
+  @Column({ type: 'date', nullable: true })
+  birthday: Date;
+
   @Column({ length: 50, unique: true })
   email: string;
 

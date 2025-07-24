@@ -1,0 +1,41 @@
+version: '3.9'
+
+services:
+  backend:
+    container_name: nest-backend-dev
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: dbsoyhenry
+      DB_NAME: ecommerce
+      CLOUDINARY_NAME: dxifqh6xt
+      CLOUDINARY_API_KEY: 629533663712939
+      CLOUDINARY_API_SECRET: KA4UVtSo_s44AKeye1NG8LsYxek
+    depends_on:
+      - postgres
+    command: npm run start:dev
+
+  postgres:
+    image: postgres:16
+    container_name: postgres-dev
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: dbsoyhenry
+      POSTGRES_DB: ecommerce
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

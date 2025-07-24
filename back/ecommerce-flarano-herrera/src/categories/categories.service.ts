@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from '../entities/category.entity';
 import { Repository } from 'typeorm';
 import { categoriesSeed } from '../seeds/categories.seed';
-import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class CategoriesService {
@@ -43,7 +42,7 @@ export class CategoriesService {
     
     return category;
   }
-  async getCategoryById(id: string) { 
+  async getCategoryById(id: string): Promise<Category> { 
     const category = await this.categoryRepository.findOneBy({ id });
     if (!category) { 
       throw new NotFoundException(`Categoria con id ${id} no encontrada`);
