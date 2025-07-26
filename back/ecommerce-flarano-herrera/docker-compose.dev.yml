@@ -11,15 +11,8 @@ services:
       - /app/node_modules
     ports:
       - "3000:3000"
-    environment:
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_USERNAME: postgres
-      DB_PASSWORD: dbsoyhenry
-      DB_NAME: ecommerce
-      CLOUDINARY_NAME: dxifqh6xt
-      CLOUDINARY_API_KEY: 629533663712939
-      CLOUDINARY_API_SECRET: KA4UVtSo_s44AKeye1NG8LsYxek
+    env_file:
+      - .env
     depends_on:
       - postgres
     command: npm run start:dev
@@ -30,10 +23,8 @@ services:
     restart: always
     ports:
       - "5433:5432"
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: dbsoyhenry
-      POSTGRES_DB: ecommerce
+    env_file:
+      - .env
     volumes:
       - pgdata:/var/lib/postgresql/data
 
