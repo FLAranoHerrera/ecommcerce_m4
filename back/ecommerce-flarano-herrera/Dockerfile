@@ -21,6 +21,4 @@ RUN npm install --only=production
 
 USER node
 
-# CMD ["node", "dist/main"]
-
-CMD node dist/main > /tmp/app.log 2>&1 ; cat /tmp/app.log
+CMD ["node", "dist/main"]
