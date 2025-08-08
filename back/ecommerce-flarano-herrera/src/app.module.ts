@@ -6,17 +6,17 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { OrdersModule } from './orders/orders.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
-import { typeOrmConfigAsync } from './config/typeorm.config';
 import { FilesModule } from './files/files.module';
-
+import { dataSourceOptions } from '../data-source'; // <-- Importa la nueva configuración
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: './.env',
+      envFilePath: '.env',
     }),
-    TypeOrmModule.forRootAsync(typeOrmConfigAsync),
+    // Así se carga la nueva configuración. ¡Mucho más limpio!
+    TypeOrmModule.forRoot(dataSourceOptions),
     ProductsModule,
     UsersModule,
     AuthModule,
