@@ -19,6 +19,8 @@ COPY --from=builder /app/package*.json ./
 
 RUN npm install --only=production
 
-USER node #
+USER node
 
-CMD ["node", "dist/main"]
+# CMD ["node", "dist/main"]
+
+CMD [ "sleep", "infinity" ]
