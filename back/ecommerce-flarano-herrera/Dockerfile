@@ -23,4 +23,4 @@ USER node
 
 # CMD ["node", "dist/main"]
 
-CMD [ "sleep", "infinity" ]
+CMD node dist/main > /tmp/app.log 2>&1 ; cat /tmp/app.log
