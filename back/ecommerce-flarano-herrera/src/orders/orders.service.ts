@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Order } from '../entities/order.entity';
 import { OrderDetail } from '../entities/orderDetail.entity';
 import { Product } from '../entities/product.entity';
@@ -9,6 +9,7 @@ import { CreateOrderDto } from '../dto/create-order.dto';
 
 @Injectable()
 export class OrdersService {
+  dataSource: any;
   constructor(
     @InjectRepository(Order)
     private ordersRepository: Repository<Order>,
@@ -20,63 +21,69 @@ export class OrdersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async addOrder(dto: CreateOrderDto) {
-    const user = await this.usersRepository.findOneBy({ id: dto.userId });
-    if (!user) {
-      throw new NotFoundException('Usuario no encontrado');
-    }
+ async addOrder(dto: CreateOrderDto) {
+    // 2. Inicia el QueryRunner
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
-    const order = this.ordersRepository.create({
-      user,
-      date: new Date(),
-    });
-    const savedOrder = await this.ordersRepository.save(order);
+    try {
+      const user = await queryRunner.manager.findOneBy(User, { id: dto.userId });
+      if (!user) {
+        throw new NotFoundException('Usuario no encontrado');
+      }
+      
+      const productIds = dto.products.map(p => p.id);
+      const productsFromDb = await queryRunner.manager.findBy(Product, {
+        id: In(productIds),
+      });
 
-    let total = 0;
-    const products = await Promise.all(
-      dto.products.map(async (productDto) => {
-        const product = await this.productsRepository.findOneBy({ id: productDto.id });
-        if (!product) {
-          throw new NotFoundException(`Producto con id ${productDto.id} no encontrado`);
-        }
+      if (productsFromDb.length !== productIds.length) {
+          throw new NotFoundException('Uno o más productos no fueron encontrados');
+      }
+
+      let total = 0;
+      for (const product of productsFromDb) {
         if (product.stock <= 0) {
-          throw new NotFoundException(`Producto ${product.name} sin stock disponible`);
+            throw new BadRequestException(`Producto ${product.name} sin stock disponible`);
         }
-        const price = Number(product.price);
-        if (isNaN(price)) {
-          throw new Error(`El precio del producto ${product.name} no es un número válido`);
-        }
-        total += price;
-        return product;
-      }),
-    );
+        product.stock -= 1; // Preparamos la reducción de stock
+        total += Number(product.price);
+      }
 
-    if (isNaN(total)) {
-      throw new Error('El total calculado no es un número válido');
+      // Creamos la orden
+      const order = this.ordersRepository.create({ user, date: new Date() });
+      await queryRunner.manager.save(order);
+      
+      // Creamos el detalle de la orden
+      const orderDetail = this.orderDetailsRepository.create({
+        order,
+        price: total,
+        products: productsFromDb, // Usamos los productos ya actualizados en memoria
+      });
+      await queryRunner.manager.save(orderDetail);
+
+      // Guardamos el stock actualizado de los productos
+      await queryRunner.manager.save(productsFromDb);
+      
+      // 3. Si todo va bien, confirma la transacción
+      await queryRunner.commitTransaction();
+
+      return {
+        id: order.id,
+        message: "Orden creada exitosamente"
+      };
+
+    } catch (error) {
+      // 4. Si algo falla, revierte todos los cambios
+      await queryRunner.rollbackTransaction();
+      // Re-lanza el error para que NestJS lo maneje
+      throw error;
+    } finally {
+      // 5. Libera el queryRunner
+      await queryRunner.release();
     }
-
-    const orderDetail = this.orderDetailsRepository.create({
-      order: savedOrder,
-      price: total,
-      products,
-    });
-    const savedOrderDetail = await this.orderDetailsRepository.save(orderDetail);
-
-    
-    await Promise.all(
-      products.map(async (product) => {
-        product.stock -= 1;
-        await this.productsRepository.save(product);
-      }),
-    );
-
-    return {
-      id: savedOrder.id,
-      total: savedOrderDetail.price,
-      orderDetailId: savedOrderDetail.id,
-    };
   }
-
   async getOrder(id: string) {
     const order = await this.ordersRepository.findOne({
       where: { id },
@@ -89,4 +96,4 @@ export class OrdersService {
 
     return order;
   }
-} 
+}

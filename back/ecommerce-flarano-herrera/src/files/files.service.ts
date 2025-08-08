@@ -1,7 +1,6 @@
 import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import { FilesRepository } from './files.repository';
 import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
-import { Multer } from 'multer';
 import * as streamifier from 'streamifier';
 
 @Injectable()

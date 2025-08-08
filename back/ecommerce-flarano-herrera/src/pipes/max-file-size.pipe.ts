@@ -1,5 +1,4 @@
 import { PipeTransform, Injectable, BadRequestException } from '@nestjs/common';
-import { Express } from 'express';
 
 @Injectable()
 export class MaxFileSizePipe implements PipeTransform {
