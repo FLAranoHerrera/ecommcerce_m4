@@ -12,6 +12,7 @@ services:
   - type: web
     name: ecommerce-api # Nombre para tu servicio de API
     plan: free
+    rootDir: back/ecommerce-flarano-herrera
     runtime: docker
     dockerfilePath: ./Dockerfile # Ruta a tu Dockerfile
     healthCheckPath: / # Ruta para que Render verifique si tu app está funcionando
