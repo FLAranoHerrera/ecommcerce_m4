@@ -7,7 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { OrdersModule } from './orders/orders.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { FilesModule } from './files/files.module';
-import { dataSourceOptions } from '../data-source'; // <-- Importa la nueva configuración
+import { dataSourceOptions } from '../data-source';
 
 @Module({
   imports: [

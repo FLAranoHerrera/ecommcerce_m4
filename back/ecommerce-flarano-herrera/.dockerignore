@@ -1,7 +1,16 @@
+# Ignorar dependencias locales y logs
 node_modules
-dist
-.env
 npm-debug.log
+
+# Ignorar la carpeta de salida de la compilación y el caché de TS
+dist
+.tsbuildinfo
+
+# Ignorar variables de entorno locales (¡MUY IMPORTANTE!)
+.env
+
+# Ignorar archivos de configuración de Docker y Git
 Dockerfile
-docker-compose.yml
-docker-compose.dev.yml
+.dockerignore
+.git
+.gitignore
