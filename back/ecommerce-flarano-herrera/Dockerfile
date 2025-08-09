@@ -1,37 +1,34 @@
-# ---- Etapa 1: Builder ----
-# Aquí instalamos todas las dependencias (incluidas las de desarrollo) y construimos el proyecto.
+# Etapa 1: Builder
 FROM node:20-alpine AS builder
-
-# Establecemos el directorio de trabajo dentro del contenedor
 WORKDIR /usr/src/app
 
-# Copiamos los archivos de manifiesto del proyecto
+# Copiamos package.json y package-lock.json para instalar dependencias
 COPY package*.json ./
 
-# Instalamos todas las dependencias
+# Instalamos todas las dependencias (incluidas dev)
 RUN npm install
 
-# Copiamos todo el código fuente de la aplicación
+# Copiamos el resto del código fuente
 COPY . .
 
-# Construimos la aplicación para producción. Esto generará la carpeta 'dist'.
+# Construimos la app para producción (genera dist/)
 RUN npm run build
 
-# ---- Etapa 2: Producción ----
-# Esta es la imagen final. Es mucho más pequeña porque no contiene devDependencies ni el código fuente original.
+# Etapa 2: Producción
 FROM node:20-alpine
-
 WORKDIR /usr/src/app
 
-# Copiamos solo los archivos necesarios de la etapa 'builder'
-COPY --from=builder /usr/src/app/package*.json ./
+# Copiamos package.json y package-lock.json para instalar solo prod dependencies
+COPY package*.json ./
+
+# Copiamos node_modules desde builder para no reinstalar en prod
+COPY --from=builder /usr/src/app/node_modules ./node_modules
+
+# Copiamos la carpeta dist con el código compilado
 COPY --from=builder /usr/src/app/dist ./dist
 
-# Instalamos ÚNICAMENTE las dependencias de producción
-RUN npm ci --only=production
-
-# Exponemos el puerto que usa la aplicación (Render lo asignará dinámicamente)
+# Puerto que exponemos (Render usa variable PORT pero aquí 3000 por defecto)
 EXPOSE 3000
 
-# El comando para iniciar la aplicación en producción
-CMD ["node", "dist/main"]
+# Comando para iniciar la app en producción
+CMD ["node", "dist/main.js"]
