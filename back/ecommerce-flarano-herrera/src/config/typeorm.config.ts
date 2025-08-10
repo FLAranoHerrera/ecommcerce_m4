@@ -12,21 +12,20 @@ export const typeOrmConfigAsync = {
   useFactory: async (
     configService: ConfigService,
   ): Promise<TypeOrmModuleOptions> => {
-    // La lógica para decidir qué configuración usar
+  
     if (configService.get<string>('DATABASE_URL')) {
-      // Opción 1: Usar DATABASE_URL si existe (para producción en Render)
+     
       return {
         type: 'postgres',
         url: configService.get<string>('DATABASE_URL'),
         ssl: {
-          rejectUnauthorized: false, // Requerido por Render
+          rejectUnauthorized: false,
         },
         entities: [User, Product, Category, Order, OrderDetail],
-        synchronize: false, // Considera ponerlo en false en producción a futuro
-        logging: true,
+        synchronize: false, 
       };
     } else {
-      // Opción 2: Usar variables individuales si no hay DATABASE_URL (para desarrollo local)
+      
       return {
         type: 'postgres',
         host: configService.get<string>('DB_HOST'),

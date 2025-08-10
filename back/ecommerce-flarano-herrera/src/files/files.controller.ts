@@ -9,13 +9,13 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FilesService } from './files.service';
 import { Express } from 'express';
-import { MaxFileSizePipe } from 'src/pipes/max-file-size.pipe';
-import { FileTypePipe } from 'src/pipes/file-type.pipe';
+import { MaxFileSizePipe } from '../pipes/max-file-size.pipe';
+import { FileTypePipe } from '../pipes/file-type.pipe';
 import { ApiTags, ApiOperation, ApiResponse, ApiConsumes, ApiParam, ApiBody } from '@nestjs/swagger';
-import { RolesGuard } from 'src/auth/roles/roles.guard';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { Roles } from 'src/auth/roles/roles.decorator';
-import { Role } from 'src/auth/roles/roles.enum';
+import { RolesGuard } from '../auth/roles/roles.guard';
+import { AuthGuard } from '../auth/auth.guard';
+import { Roles } from '../auth/roles/roles.decorator';
+import { Role } from '../auth/roles/roles.enum';
 
 @ApiTags('files')
 @Controller('files')

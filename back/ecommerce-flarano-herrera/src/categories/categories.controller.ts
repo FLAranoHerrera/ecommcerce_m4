@@ -1,7 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
-import { UuidPipe } from 'src/pipes/uuid.pipe';
+import { UuidPipe } from '../pipes/uuid.pipe';
 
 @ApiTags('categories')
 @Controller('categories')

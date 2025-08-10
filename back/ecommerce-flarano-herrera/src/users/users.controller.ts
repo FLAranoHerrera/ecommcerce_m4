@@ -11,10 +11,10 @@ import {
   UseGuards,
   BadRequestException,
 } from '@nestjs/common';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { RolesGuard } from 'src/auth/roles/roles.guard';
-import { Roles } from 'src/auth/roles/roles.decorator';
-import { Role } from 'src/auth/roles/roles.enum';
+import { AuthGuard } from '../auth/auth.guard';
+import { RolesGuard } from '../auth/roles/roles.guard';
+import { Roles } from '../auth/roles/roles.decorator';
+import { Role } from '../auth/roles/roles.enum';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UuidPipe } from '../pipes/uuid.pipe';

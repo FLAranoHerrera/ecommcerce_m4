@@ -6,7 +6,7 @@ import { FilesRepository } from './files.repository';
 import { ProductsModule } from '../products/products.module';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 import { Product } from '../entities/product.entity';
-import { AuthModule } from 'src/auth/auth.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [

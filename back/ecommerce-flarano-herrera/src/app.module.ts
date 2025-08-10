@@ -7,7 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { OrdersModule } from './orders/orders.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { FilesModule } from './files/files.module';
-import { dataSourceOptions } from './data-source';
+import { typeOrmConfigAsync } from './config/typeorm.config';
 
 @Module({
   imports: [
@@ -16,7 +16,7 @@ import { dataSourceOptions } from './data-source';
       envFilePath: '.env',
     }),
     // Así se carga la nueva configuración. ¡Mucho más limpio!
-    TypeOrmModule.forRoot(dataSourceOptions),
+    TypeOrmModule.forRootAsync(typeOrmConfigAsync),
     ProductsModule,
     UsersModule,
     AuthModule,
