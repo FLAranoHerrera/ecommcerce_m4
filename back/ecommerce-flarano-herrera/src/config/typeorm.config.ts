@@ -1,10 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { User } from '../entities/user.entity';
-import { Product } from '../entities/product.entity';
-import { Category } from '../entities/category.entity';
-import { Order } from '../entities/order.entity';
-import { OrderDetail } from '../entities/orderDetail.entity';
 
 export const typeOrmConfigAsync = {
   imports: [ConfigModule],
@@ -12,20 +7,22 @@ export const typeOrmConfigAsync = {
   useFactory: async (
     configService: ConfigService,
   ): Promise<TypeOrmModuleOptions> => {
-  
+    
+    const entitiesPath = __dirname + '/../**/*.entity.{js,ts}';
+
     if (configService.get<string>('DATABASE_URL')) {
-     
+      // Producción (Heroku, Railway, etc.)
       return {
         type: 'postgres',
         url: configService.get<string>('DATABASE_URL'),
         ssl: {
           rejectUnauthorized: false,
         },
-        entities: [User, Product, Category, Order, OrderDetail],
-        synchronize: false, 
+        entities: [entitiesPath],
+        synchronize: false, // nunca en prod
       };
     } else {
-      
+      // Desarrollo o Docker
       return {
         type: 'postgres',
         host: configService.get<string>('DB_HOST'),
@@ -33,8 +30,8 @@ export const typeOrmConfigAsync = {
         username: configService.get<string>('DB_USERNAME'),
         password: String(configService.get('DB_PASSWORD') ?? ''),
         database: configService.get<string>('DB_NAME'),
-        entities: [User, Product, Category, Order, OrderDetail],
-        synchronize: true,
+        entities: [entitiesPath],
+        synchronize: true, // en desarrollo sí
         logging: true,
       };
     }
