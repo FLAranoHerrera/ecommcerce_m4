@@ -25,9 +25,8 @@ services:
     depends_on:
       - db
     command: npm run start:prod
-  
     environment:
-     - NODE_ENV=docker
+      NODE_ENV: docker
 
 volumes:
   postgres-data:
