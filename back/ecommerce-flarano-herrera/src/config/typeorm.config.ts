@@ -11,7 +11,7 @@ export const typeOrmConfigAsync = {
     const entitiesPath = __dirname + '/../**/*.entity.{js,ts}';
 
     if (configService.get<string>('DATABASE_URL')) {
-      // Producción (Heroku, Railway, etc.)
+      
       return {
         type: 'postgres',
         url: configService.get<string>('DATABASE_URL'),
@@ -19,7 +19,7 @@ export const typeOrmConfigAsync = {
           rejectUnauthorized: false,
         },
         entities: [entitiesPath],
-        synchronize: false, // nunca en prod
+        synchronize: false, 
       };
     } else {
       // Desarrollo o Docker
@@ -31,9 +31,9 @@ export const typeOrmConfigAsync = {
         password: String(configService.get('DB_PASSWORD') ?? ''),
         database: configService.get<string>('DB_NAME'),
         entities: [entitiesPath],
-        synchronize: true, // en desarrollo sí
+        synchronize: true, 
         logging: true,
       };
     }
   },
-};
+}

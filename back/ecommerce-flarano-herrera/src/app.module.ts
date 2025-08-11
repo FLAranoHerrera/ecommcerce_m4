@@ -13,9 +13,13 @@ import { typeOrmConfigAsync } from './config/typeorm.config';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
+      envFilePath: process.env.NODE_ENV === 'docker'
+      ? '.env.docker'
+      : process.env.NODE_ENV === 'production'
+      ? '.env.prod'
+      : '.env',
     }),
-    // Así se carga la nueva configuración. ¡Mucho más limpio!
+    
     TypeOrmModule.forRootAsync(typeOrmConfigAsync),
     ProductsModule,
     UsersModule,

@@ -25,6 +25,7 @@ COPY package*.json ./
 RUN npm install --only=production
 
 COPY --from=builder /app/dist ./dist
+COPY tsconfig.json ./tsconfig.json
 
 # Exponemos el puerto de NestJS
 EXPOSE 3000
