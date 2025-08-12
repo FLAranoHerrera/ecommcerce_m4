@@ -13,7 +13,6 @@ import { typeOrmConfigAsync } from './config/typeorm.config';
   imports: [
     ConfigModule.forRoot({
   isGlobal: true,
-  envFilePath: process.env.NODE_ENV === 'production' ? '.env.prod' : '.env',
     }),
     
     TypeOrmModule.forRootAsync(typeOrmConfigAsync),

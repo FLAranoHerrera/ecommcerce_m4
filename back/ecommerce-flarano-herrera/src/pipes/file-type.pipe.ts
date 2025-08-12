@@ -1,4 +1,5 @@
 import { PipeTransform, Injectable, BadRequestException } from '@nestjs/common';
+import { Multer } from 'multer';
 
 @Injectable()
 export class FileTypePipe implements PipeTransform {

@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FilesService } from './files.service';
-import { Express } from 'express';
 import { MaxFileSizePipe } from '../pipes/max-file-size.pipe';
 import { FileTypePipe } from '../pipes/file-type.pipe';
 import { ApiTags, ApiOperation, ApiResponse, ApiConsumes, ApiParam, ApiBody } from '@nestjs/swagger';
@@ -16,6 +15,7 @@ import { RolesGuard } from '../auth/roles/roles.guard';
 import { AuthGuard } from '../auth/auth.guard';
 import { Roles } from '../auth/roles/roles.decorator';
 import { Role } from '../auth/roles/roles.enum';
+import { Multer } from 'multer';
 
 @ApiTags('files')
 @Controller('files')
