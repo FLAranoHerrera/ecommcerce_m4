@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: ecommerce-flarano-herrera
+    env: node
+    plan: free
+    buildCommand: ./build.sh
+    startCommand: npm run start:prod
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: JWT_SECRET
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ecommerce-db
+          property: connectionString
+      - key: CLOUDINARY_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: RATE_LIMIT_TTL
+        value: 60
+      - key: RATE_LIMIT_LIMIT
+        value: 50
+      - key: LOG_LEVEL
+        value: warn
+
+databases:
+  - name: ecommerce-db
+    databaseName: ecommerce
+    user: ecommerce_user
+    plan: free

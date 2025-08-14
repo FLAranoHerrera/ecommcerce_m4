@@ -23,13 +23,122 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+API de E-commerce desarrollada con [NestJS](https://github.com/nestjs/nest) framework TypeScript.
+
+### Características Implementadas
+
+- 🔐 **Autenticación JWT** con roles y permisos
+- 👥 **Gestión de usuarios** con validación robusta
+- 🛍️ **Catálogo de productos** con paginación
+- 📦 **Sistema de órdenes** de compra
+- 🗂️ **Categorías** de productos
+- 📁 **Manejo de archivos** con Cloudinary
+- 🛡️ **Rate limiting** para prevenir ataques
+- 📝 **Logging estructurado** con NestJS Logger
+- 🔍 **Validación de entorno** con class-validator
+- 🚨 **Manejo global de errores** personalizado
+- 📚 **Documentación automática** con Swagger
+
+### Variables de Entorno Requeridas
+
+Copia el archivo `env.example` a `.env` y configura las siguientes variables:
+
+```bash
+# Configuración de la aplicación
+PORT=3000
+NODE_ENV=development
+
+# Configuración de JWT (OBLIGATORIA)
+JWT_SECRET=tu_jwt_secret_super_seguro_aqui
+
+# Configuración de base de datos
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_NAME=ecommerce
+
+# Configuración de Cloudinary (opcional)
+CLOUDINARY_NAME=tu_cloudinary_name
+CLOUDINARY_API_KEY=tu_cloudinary_api_key
+CLOUDINARY_API_SECRET=tu_cloudinary_api_secret
+
+# Configuración de rate limiting
+RATE_LIMIT_TTL=60
+RATE_LIMIT_LIMIT=100
+```
 
 ## Project setup
 
 ```bash
 $ npm install
 ```
+
+## 🐳 Docker
+
+### Desarrollo local con Docker
+
+```bash
+# Construir y ejecutar con Docker Compose
+docker-compose up --build
+
+# Ejecutar en segundo plano
+docker-compose up -d
+
+# Ver logs
+docker-compose logs -f app
+
+# Detener servicios
+docker-compose down
+```
+
+### Construir imagen Docker
+
+```bash
+# Construir imagen
+docker build -t ecommerce-flarano-herrera .
+
+# Ejecutar contenedor
+docker run -p 3000:3000 --env-file .env.docker ecommerce-flarano-herrera
+```
+
+## 🚀 Deploy en Render
+
+### Opción 1: Deploy automático con render.yaml
+
+1. Conecta tu repositorio de GitHub a Render
+2. Render detectará automáticamente el archivo `render.yaml`
+3. Configura las variables de entorno en el dashboard de Render:
+   - `JWT_SECRET` (obligatorio)
+   - `CLOUDINARY_NAME`
+   - `CLOUDINARY_API_KEY`
+   - `CLOUDINARY_API_SECRET`
+
+### Opción 2: Deploy manual
+
+1. Crea un nuevo **Web Service** en Render
+2. Conecta tu repositorio de GitHub
+3. Configura:
+   - **Build Command**: `./build.sh`
+   - **Start Command**: `npm run start:prod`
+   - **Environment**: `Node`
+4. Configura las variables de entorno
+5. Conecta una base de datos PostgreSQL
+
+### Variables de entorno en Render
+
+| Variable | Descripción | Ejemplo |
+|----------|-------------|---------|
+| `NODE_ENV` | Entorno de la aplicación | `production` |
+| `PORT` | Puerto de la aplicación | `3000` |
+| `JWT_SECRET` | Secret para JWT (OBLIGATORIO) | `tu_secret_aqui` |
+| `DATABASE_URL` | URL de la base de datos | `postgresql://...` |
+| `CLOUDINARY_NAME` | Nombre de Cloudinary | `tu_cloudinary_name` |
+| `CLOUDINARY_API_KEY` | API Key de Cloudinary | `tu_api_key` |
+| `CLOUDINARY_API_SECRET` | API Secret de Cloudinary | `tu_api_secret` |
+| `RATE_LIMIT_TTL` | Tiempo para rate limiting | `60` |
+| `RATE_LIMIT_LIMIT` | Límite de requests | `50` |
+| `LOG_LEVEL` | Nivel de logging | `warn` |
 
 ## Compile and run the project
 

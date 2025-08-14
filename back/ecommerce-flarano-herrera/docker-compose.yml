@@ -1,17 +1,20 @@
-version: '3.8'
-
 services:
   db:
-    image: postgres:16
+    image: postgres:16-alpine
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: dbsoyhenry
       POSTGRES_DB: ecommerce
     volumes:
       - postgres-data:/var/lib/postgresql/data
     ports:
       - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   app:
     build:
@@ -23,10 +26,17 @@ services:
     env_file:
       - .env.docker
     depends_on:
-      - db
-    command: npm run start:prod
+      db:
+        condition: service_healthy
     environment:
       NODE_ENV: docker
+      DB_HOST: db
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/api', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 volumes:
   postgres-data:

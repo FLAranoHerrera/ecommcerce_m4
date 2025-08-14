@@ -22,12 +22,15 @@ export class SignupDto {
   @MaxLength(80)
   name: string;
 
-@ApiProperty({ 
-  description: 'fecha de nacimiento',
-  example: "2025-07-22"
-})
+  @ApiProperty({ 
+    description: 'Fecha de nacimiento en formato YYYY-MM-DD',
+    example: "1990-07-22"
+  })
   @IsString()
   @IsNotEmpty()
+  @Matches(/^\d{4}-\d{2}-\d{2}$/, {
+    message: 'La fecha debe estar en formato YYYY-MM-DD'
+  })
   birthday: string;
 
   @ApiProperty({
@@ -87,12 +90,15 @@ export class SignupDto {
   address: string;
 
   @ApiProperty({
-    description: 'Número de teléfono del usuario',
+    description: 'Número de teléfono del usuario (solo números)',
     example: 1234567890,
     type: 'number'
   })
   @IsNumber()
   @IsNotEmpty()
+  @Matches(/^\d{10,15}$/, {
+    message: 'El teléfono debe contener entre 10 y 15 dígitos'
+  })
   phone: number;
 
   @ApiProperty({
