@@ -28,6 +28,8 @@ services:
         value: 50
       - key: LOG_LEVEL
         value: warn
+      - key: DB_SYNC_ONCE
+        value: false
 
 databases:
   - name: ecommerce-db

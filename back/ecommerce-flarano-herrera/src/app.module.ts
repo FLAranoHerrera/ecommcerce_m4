@@ -11,6 +11,7 @@ import { FilesModule } from './files/files.module';
 import { typeOrmConfigAsync } from './config/typeorm.config';
 import { throttleConfig } from './config/throttle.config';
 import { validate } from './config/env.validation';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { validate } from './config/env.validation';
     OrdersModule,
     FilesModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

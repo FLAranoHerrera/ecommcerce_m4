@@ -19,7 +19,7 @@ export const typeOrmConfigAsync = {
           rejectUnauthorized: false,
         },
         entities: [entitiesPath],
-        synchronize: false, 
+        synchronize: configService.get<string>('DB_SYNC_ONCE') === 'true', 
       };
     } else {
       // Desarrollo o Docker
