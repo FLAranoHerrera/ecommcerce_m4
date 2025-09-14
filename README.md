@@ -255,7 +255,7 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 
 ## 👨‍💻 Autor
 
-**Frank Larano Herrera**
+**Francisco Leonardo Arano Herrera**
 - GitHub: [@FLAranoHerrera](https://github.com/FLAranoHerrera)
 - LinkedIn: [Francisco Leonardo Arano Herrera](https://www.linkedin.com/in/francisco-leonardo-arano-herrera-540198169)
 - Email: aranoherrera92@gmail.com
