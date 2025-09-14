@@ -1,207 +1,265 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🛒 E-commerce API - Proyecto M4
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Una API REST completa para un sistema de e-commerce desarrollada con **NestJS**, **TypeORM** y **PostgreSQL**.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Características
 
-## Description
+- ✅ **Autenticación JWT** con roles (Admin/User)
+- ✅ **Gestión de productos** con paginación y filtros
+- ✅ **Sistema de categorías** 
+- ✅ **Gestión de usuarios** completa
+- ✅ **Sistema de órdenes** y detalles de compra
+- ✅ **Subida de imágenes** con Cloudinary
+- ✅ **Validación de datos** con class-validator
+- ✅ **Documentación automática** con Swagger
+- ✅ **Rate limiting** para protección
+- ✅ **Logging** completo
+- ✅ **Docker** para contenedorización
+- ✅ **Deploy en Render** con base de datos Neon
 
-API de E-commerce desarrollada con [NestJS](https://github.com/nestjs/nest) framework TypeScript.
+## 🛠️ Tecnologías
 
-### Características Implementadas
+- **Backend**: NestJS, TypeScript
+- **Base de datos**: PostgreSQL (Neon)
+- **ORM**: TypeORM
+- **Autenticación**: JWT
+- **Validación**: class-validator, class-transformer
+- **Documentación**: Swagger/OpenAPI
+- **Storage**: Cloudinary
+- **Deploy**: Render
+- **Contenedores**: Docker
 
-- 🔐 **Autenticación JWT** con roles y permisos
-- 👥 **Gestión de usuarios** con validación robusta
-- 🛍️ **Catálogo de productos** con paginación
-- 📦 **Sistema de órdenes** de compra
-- 🗂️ **Categorías** de productos
-- 📁 **Manejo de archivos** con Cloudinary
-- 🛡️ **Rate limiting** para prevenir ataques
-- 📝 **Logging estructurado** con NestJS Logger
-- 🔍 **Validación de entorno** con class-validator
-- 🚨 **Manejo global de errores** personalizado
-- 📚 **Documentación automática** con Swagger
+## 📋 Requisitos
 
-### Variables de Entorno Requeridas
+- Node.js 18+
+- npm o yarn
+- PostgreSQL (o usar Neon)
+- Cuenta de Cloudinary (opcional)
 
-Copia el archivo `env.example` a `.env` y configura las siguientes variables:
+## 🚀 Instalación
 
+### 1. Clonar el repositorio
 ```bash
-# Configuración de la aplicación
-PORT=3000
-NODE_ENV=development
+git clone https://github.com/tu-usuario/ecommerce-flarano-herrera.git
+cd ecommerce-flarano-herrera
+```
 
-# Configuración de JWT (OBLIGATORIA)
-JWT_SECRET=tu_jwt_secret_super_seguro_aqui
+### 2. Instalar dependencias
+```bash
+npm install
+```
 
-# Configuración de base de datos
+### 3. Configurar variables de entorno
+Crea un archivo `.env` en la raíz del proyecto:
+
+```env
+# Base de datos
+DATABASE_URL=postgresql://username:password@hostname:port/database
+# O para desarrollo local:
 DB_HOST=localhost
 DB_PORT=5432
-DB_USERNAME=postgres
-DB_PASSWORD=postgres
+DB_USERNAME=tu_usuario
+DB_PASSWORD=tu_password
 DB_NAME=ecommerce
 
-# Configuración de Cloudinary (opcional)
+# JWT
+JWT_SECRET=tu_jwt_secret_super_seguro
+
+# Cloudinary (opcional)
 CLOUDINARY_NAME=tu_cloudinary_name
-CLOUDINARY_API_KEY=tu_cloudinary_api_key
-CLOUDINARY_API_SECRET=tu_cloudinary_api_secret
+CLOUDINARY_API_KEY=tu_api_key
+CLOUDINARY_API_SECRET=tu_api_secret
 
-# Configuración de rate limiting
+# Rate Limiting
 RATE_LIMIT_TTL=60
-RATE_LIMIT_LIMIT=100
+RATE_LIMIT_LIMIT=50
+
+# Puerto
+PORT=3000
 ```
 
-## Project setup
+### 4. Ejecutar la aplicación
 
+#### Desarrollo
 ```bash
-$ npm install
+npm run start:dev
 ```
 
-## 🐳 Docker
-
-### Desarrollo local con Docker
-
+#### Producción
 ```bash
-# Construir y ejecutar con Docker Compose
-docker-compose up --build
+npm run build
+npm run start:prod
+```
 
-# Ejecutar en segundo plano
+#### Con Docker
+```bash
 docker-compose up -d
-
-# Ver logs
-docker-compose logs -f app
-
-# Detener servicios
-docker-compose down
 ```
 
-### Construir imagen Docker
+## 📚 Documentación de la API
 
-```bash
-# Construir imagen
-docker build -t ecommerce-flarano-herrera .
+Una vez que la aplicación esté ejecutándose, puedes acceder a la documentación interactiva de Swagger en:
 
-# Ejecutar contenedor
-docker run -p 3000:3000 --env-file .env.docker ecommerce-flarano-herrera
+- **Local**: http://localhost:3000/api
+- **Producción**: https://tu-dominio-render.com/api
+
+## 🔐 Autenticación
+
+La API utiliza JWT para autenticación. Para acceder a endpoints protegidos:
+
+1. **Registrarse**: `POST /auth/signup`
+2. **Iniciar sesión**: `POST /auth/signin`
+3. **Usar el token**: Incluir `Authorization: Bearer <token>` en las peticiones
+
+### Ejemplo de registro:
+```json
+POST /auth/signup
+{
+  "email": "usuario@ejemplo.com",
+  "password": "password123",
+  "name": "Usuario Ejemplo"
+}
 ```
+
+## 📊 Endpoints principales
+
+### 🔐 Autenticación
+- `POST /auth/signup` - Registro de usuario
+- `POST /auth/signin` - Inicio de sesión
+
+### 👥 Usuarios
+- `GET /users` - Listar usuarios (Admin)
+- `GET /users/:id` - Obtener usuario por ID
+- `PUT /users/:id` - Actualizar usuario
+- `DELETE /users/:id` - Eliminar usuario (Admin)
+
+### 🛍️ Productos
+- `GET /products` - Listar productos (paginado)
+- `GET /products/:id` - Obtener producto por ID
+- `POST /products` - Crear producto (Admin)
+- `PUT /products/:id` - Actualizar producto (Admin)
+- `DELETE /products/:id` - Eliminar producto (Admin)
+- `GET /products/seeder` - Cargar productos de ejemplo
+
+### 📂 Categorías
+- `GET /categories` - Listar categorías
+- `GET /categories/:id` - Obtener categoría por ID
+- `GET /categories/seeder` - Cargar categorías de ejemplo
+
+### 🛒 Órdenes
+- `POST /orders` - Crear orden de compra
+- `GET /orders/:id` - Obtener orden por ID
+
+### 📁 Archivos
+- `POST /files/uploadImage/:id` - Subir imagen de producto (Admin)
+
+## 🗄️ Estructura de la base de datos
+
+### Entidades principales:
+- **Users**: Información de usuarios
+- **Products**: Catálogo de productos
+- **Categories**: Categorías de productos
+- **Orders**: Órdenes de compra
+- **OrderDetails**: Detalles de cada orden
 
 ## 🚀 Deploy en Render
 
-### Opción 1: Deploy automático con render.yaml
+### 1. Configurar base de datos en Neon
+1. Crear cuenta en [Neon](https://neon.tech)
+2. Crear nuevo proyecto
+3. Copiar la connection string
 
-1. Conecta tu repositorio de GitHub a Render
-2. Render detectará automáticamente el archivo `render.yaml`
-3. Configura las variables de entorno en el dashboard de Render:
-   - `JWT_SECRET` (obligatorio)
-   - `CLOUDINARY_NAME`
-   - `CLOUDINARY_API_KEY`
-   - `CLOUDINARY_API_SECRET`
+### 2. Deploy en Render
+1. Conectar repositorio de GitHub
+2. Configurar variables de entorno:
+   - `DATABASE_URL`: URL de Neon
+   - `JWT_SECRET`: Tu secret JWT
+   - `DB_SYNC_ONCE`: `true` (solo para inicializar)
+3. Deploy automático
 
-### Opción 2: Deploy manual
+### 3. Inicializar base de datos
+1. Activar `DB_SYNC_ONCE=true` en Render
+2. Redeploy (crea las tablas)
+3. Ejecutar seeds:
+   - `GET /categories/seeder`
+   - `GET /products/seeder`
+4. Desactivar `DB_SYNC_ONCE=false`
+5. Redeploy final
 
-1. Crea un nuevo **Web Service** en Render
-2. Conecta tu repositorio de GitHub
-3. Configura:
-   - **Build Command**: `./build.sh`
-   - **Start Command**: `npm run start:prod`
-   - **Environment**: `Node`
-4. Configura las variables de entorno
-5. Conecta una base de datos PostgreSQL
-
-### Variables de entorno en Render
-
-| Variable | Descripción | Ejemplo |
-|----------|-------------|---------|
-| `NODE_ENV` | Entorno de la aplicación | `production` |
-| `PORT` | Puerto de la aplicación | `3000` |
-| `JWT_SECRET` | Secret para JWT (OBLIGATORIO) | `tu_secret_aqui` |
-| `DATABASE_URL` | URL de la base de datos | `postgresql://...` |
-| `CLOUDINARY_NAME` | Nombre de Cloudinary | `tu_cloudinary_name` |
-| `CLOUDINARY_API_KEY` | API Key de Cloudinary | `tu_api_key` |
-| `CLOUDINARY_API_SECRET` | API Secret de Cloudinary | `tu_api_secret` |
-| `RATE_LIMIT_TTL` | Tiempo para rate limiting | `60` |
-| `RATE_LIMIT_LIMIT` | Límite de requests | `50` |
-| `LOG_LEVEL` | Nivel de logging | `warn` |
-
-## Compile and run the project
+## 🧪 Testing
 
 ```bash
-# development
-$ npm run start
+# Tests unitarios
+npm run test
 
-# watch mode
-$ npm run start:dev
+# Tests e2e
+npm run test:e2e
 
-# production mode
-$ npm run start:prod
+# Coverage
+npm run test:cov
 ```
 
-## Run tests
+## 📝 Scripts disponibles
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm run start          # Iniciar en producción
+npm run start:dev      # Iniciar en desarrollo
+npm run start:debug    # Iniciar en modo debug
+npm run build          # Compilar para producción
+npm run test           # Ejecutar tests
+npm run test:e2e       # Ejecutar tests e2e
+npm run test:cov       # Coverage de tests
+npm run lint           # Linter
+npm run format         # Formatear código
 ```
 
-## Deployment
+## 🔧 Configuración de desarrollo
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+### Estructura del proyecto:
+```
+src/
+├── auth/              # Autenticación y autorización
+├── categories/        # Gestión de categorías
+├── config/           # Configuraciones
+├── dto/              # Data Transfer Objects
+├── entities/         # Entidades de TypeORM
+├── files/            # Gestión de archivos
+├── filters/          # Filtros de excepciones
+├── middlewares/      # Middlewares personalizados
+├── orders/           # Sistema de órdenes
+├── pipes/            # Pipes de validación
+├── products/         # Gestión de productos
+├── seeds/            # Datos de ejemplo
+├── types/            # Tipos TypeScript
+└── users/            # Gestión de usuarios
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## 🤝 Contribuir
 
-## Resources
+1. Fork el proyecto
+2. Crear una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abrir un Pull Request
 
-Check out a few resources that may come in handy when working with NestJS:
+## 📄 Licencia
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
 
-## Support
+## 👨‍💻 Autor
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+**Frank Larano Herrera**
+- GitHub: [@tu-usuario](https://github.com/tu-usuario)
+- LinkedIn: [Frank Larano](https://linkedin.com/in/frank-larano)
 
-## Stay in touch
+## 🙏 Agradecimientos
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- [NestJS](https://nestjs.com/) - Framework de Node.js
+- [TypeORM](https://typeorm.io/) - ORM para TypeScript
+- [Neon](https://neon.tech/) - Base de datos PostgreSQL serverless
+- [Render](https://render.com/) - Plataforma de deploy
+- [Cloudinary](https://cloudinary.com/) - Gestión de imágenes
 
-## License
+---
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+⭐ **¡Si te gusta este proyecto, no olvides darle una estrella!** ⭐
