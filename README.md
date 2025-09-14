@@ -40,8 +40,8 @@ Una API REST completa para un sistema de e-commerce desarrollada con **NestJS**,
 
 ### 1. Clonar el repositorio
 ```bash
-git clone https://github.com/tu-usuario/ecommerce-flarano-herrera.git
-cd ecommerce-flarano-herrera
+git clone https://github.com/frank-larano/PM4BE-FLAranoHerrera.git
+cd PM4BE-FLAranoHerrera/back/ecommerce-flarano-herrera
 ```
 
 ### 2. Instalar dependencias
@@ -50,7 +50,7 @@ npm install
 ```
 
 ### 3. Configurar variables de entorno
-Crea un archivo `.env` en la raíz del proyecto:
+Crea un archivo `.env` en la raíz del proyecto backend:
 
 ```env
 # Base de datos
@@ -101,7 +101,7 @@ docker-compose up -d
 Una vez que la aplicación esté ejecutándose, puedes acceder a la documentación interactiva de Swagger en:
 
 - **Local**: http://localhost:3000/api
-- **Producción**: https://tu-dominio-render.com/api
+- **Producción**: https://ecommerce-flarano-herrera.onrender.com/api
 
 ## 🔐 Autenticación
 
@@ -217,21 +217,28 @@ npm run format         # Formatear código
 
 ### Estructura del proyecto:
 ```
-src/
-├── auth/              # Autenticación y autorización
-├── categories/        # Gestión de categorías
-├── config/           # Configuraciones
-├── dto/              # Data Transfer Objects
-├── entities/         # Entidades de TypeORM
-├── files/            # Gestión de archivos
-├── filters/          # Filtros de excepciones
-├── middlewares/      # Middlewares personalizados
-├── orders/           # Sistema de órdenes
-├── pipes/            # Pipes de validación
-├── products/         # Gestión de productos
-├── seeds/            # Datos de ejemplo
-├── types/            # Tipos TypeScript
-└── users/            # Gestión de usuarios
+PM4BE-FLAranoHerrera/
+├── back/
+│   └── ecommerce-flarano-herrera/
+│       ├── src/
+│       │   ├── auth/              # Autenticación y autorización
+│       │   ├── categories/        # Gestión de categorías
+│       │   ├── config/           # Configuraciones
+│       │   ├── dto/              # Data Transfer Objects
+│       │   ├── entities/         # Entidades de TypeORM
+│       │   ├── files/            # Gestión de archivos
+│       │   ├── filters/          # Filtros de excepciones
+│       │   ├── middlewares/      # Middlewares personalizados
+│       │   ├── orders/           # Sistema de órdenes
+│       │   ├── pipes/            # Pipes de validación
+│       │   ├── products/         # Gestión de productos
+│       │   ├── seeds/            # Datos de ejemplo
+│       │   ├── types/            # Tipos TypeScript
+│       │   └── users/            # Gestión de usuarios
+│       ├── package.json
+│       ├── docker-compose.yml
+│       └── README.md
+└── README.md (este archivo)
 ```
 
 ## 🤝 Contribuir
@@ -249,8 +256,9 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 ## 👨‍💻 Autor
 
 **Frank Larano Herrera**
-- GitHub: [@tu-usuario](https://github.com/tu-usuario)
-- LinkedIn: [Frank Larano](https://linkedin.com/in/frank-larano)
+- GitHub: [@FLAranoHerrera](https://github.com/FLAranoHerrera)
+- LinkedIn: [Francisco Leonardo Arano Herrera](https://www.linkedin.com/in/francisco-leonardo-arano-herrera-540198169)
+- Email: aranoherrera92@gmail.com
 
 ## 🙏 Agradecimientos
 
