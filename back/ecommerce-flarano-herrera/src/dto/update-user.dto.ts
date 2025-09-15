@@ -8,7 +8,7 @@ export class UpdateUserDto {
 
   @IsNumber()
   @IsOptional()
-  phone?: number;
+  phone?: string;
 
   @IsString()
   @IsNotEmpty()
