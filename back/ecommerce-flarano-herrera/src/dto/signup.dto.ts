@@ -91,15 +91,15 @@ export class SignupDto {
 
   @ApiProperty({
     description: 'Número de teléfono del usuario (solo números)',
-    example: 1234567890,
-    type: 'number'
+    example: "1234567890",
+    type: 'string'
   })
   @IsNumber()
   @IsNotEmpty()
   @Matches(/^\d{10,15}$/, {
     message: 'El teléfono debe contener entre 10 y 15 dígitos'
   })
-  phone: number;
+  phone: string;
 
   @ApiProperty({
     description: 'País del usuario',
