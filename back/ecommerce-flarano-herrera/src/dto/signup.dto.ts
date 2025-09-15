@@ -94,7 +94,7 @@ export class SignupDto {
     example: "1234567890",
     type: 'string'
   })
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
   @Matches(/^\d{10,15}$/, {
     message: 'El teléfono debe contener entre 10 y 15 dígitos'

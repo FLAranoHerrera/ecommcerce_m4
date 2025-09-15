@@ -6,7 +6,7 @@ export class UpdateUserDto {
   @IsOptional()
   name?: string;
 
-  @IsNumber()
+  @IsString()
   @IsOptional()
   phone?: string;
 
