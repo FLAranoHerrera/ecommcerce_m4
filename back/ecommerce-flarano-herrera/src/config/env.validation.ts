@@ -3,7 +3,8 @@ import { IsString, IsNumber, IsOptional, validateSync } from 'class-validator';
 
 class EnvironmentVariables {
   @IsString()
-  JWT_SECRET: string;
+  @IsOptional()
+  JWT_SECRET?: string;
 
   @IsString()
   @IsOptional()

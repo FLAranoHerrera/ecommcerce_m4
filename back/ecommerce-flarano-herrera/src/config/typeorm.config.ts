@@ -11,6 +11,7 @@ export const typeOrmConfigAsync = {
     const entitiesPath = __dirname + '/../**/*.entity.{js,ts}';
 
     if (configService.get<string>('DATABASE_URL')) {
+      console.log('🔗 Configurando conexión a base de datos con DATABASE_URL');
       
       return {
         type: 'postgres',
@@ -19,7 +20,10 @@ export const typeOrmConfigAsync = {
           rejectUnauthorized: false,
         },
         entities: [entitiesPath],
-        synchronize: configService.get<string>('DB_SYNC_ONCE') === 'true', 
+        synchronize: configService.get<string>('DB_SYNC_ONCE') === 'true',
+        logging: configService.get<string>('NODE_ENV') === 'development',
+        retryAttempts: 3,
+        retryDelay: 3000,
       };
     } else {
       // Desarrollo o Docker
