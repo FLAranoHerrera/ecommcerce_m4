@@ -1,273 +1,115 @@
-# 🛒 E-commerce API - Proyecto M4
+# E-commerce API
 
-Una API REST completa para un sistema de e-commerce desarrollada con **NestJS**, **TypeORM** y **PostgreSQL**.
+API REST de comercio electrónico construida con NestJS 11, TypeORM,
+PostgreSQL, JWT y Cloudinary.
 
-## 🚀 Características
+## Requisitos
 
-- ✅ **Autenticación JWT** con roles (Admin/User)
-- ✅ **Gestión de productos** con paginación y filtros
-- ✅ **Sistema de categorías** 
-- ✅ **Gestión de usuarios** completa
-- ✅ **Sistema de órdenes** y detalles de compra
-- ✅ **Subida de imágenes** con Cloudinary
-- ✅ **Validación de datos** con class-validator
-- ✅ **Documentación automática** con Swagger
-- ✅ **Rate limiting** para protección
-- ✅ **Logging** completo
-- ✅ **Docker** para contenedorización
-- ✅ **Deploy en Render** con base de datos Neon
+- Node.js 20 o superior (se recomienda Node.js 22)
+- npm
+- PostgreSQL 16, local o mediante Docker
+- Cuenta de Cloudinary para subir imágenes
 
-## 🛠️ Tecnologías
+## Inicio rápido con Docker
 
-- **Backend**: NestJS, TypeScript
-- **Base de datos**: PostgreSQL (Neon)
-- **ORM**: TypeORM
-- **Autenticación**: JWT
-- **Validación**: class-validator, class-transformer
-- **Documentación**: Swagger/OpenAPI
-- **Storage**: Cloudinary
-- **Deploy**: Render
-- **Contenedores**: Docker
-
-## 📋 Requisitos
-
-- Node.js 18+
-- npm o yarn
-- PostgreSQL (o usar Neon)
-- Cuenta de Cloudinary (opcional)
-
-## 🚀 Instalación
-
-### 1. Clonar el repositorio
 ```bash
-git clone https://github.com/frank-larano/PM4BE-FLAranoHerrera.git
-cd PM4BE-FLAranoHerrera/back/ecommerce-flarano-herrera
+cp .env.example .env
+# Configura DB_PASSWORD, JWT_SECRET y, opcionalmente, Cloudinary.
+docker compose up -d --build
 ```
 
-### 2. Instalar dependencias
+La API queda disponible en `http://localhost:3000` y Swagger en
+`http://localhost:3000/api`.
+
+Docker ejecuta automáticamente las migraciones pendientes. El volumen
+`postgres-data` conserva la base entre reinicios.
+
+## Desarrollo local
+
 ```bash
-npm install
-```
-
-### 3. Configurar variables de entorno
-Crea un archivo `.env` en la raíz del proyecto backend:
-
-```env
-# Base de datos
-DATABASE_URL=postgresql://username:password@hostname:port/database
-# O para desarrollo local:
-DB_HOST=localhost
-DB_PORT=5432
-DB_USERNAME=tu_usuario
-DB_PASSWORD=tu_password
-DB_NAME=ecommerce
-
-# JWT
-JWT_SECRET=tu_jwt_secret_super_seguro
-
-# Cloudinary (opcional)
-CLOUDINARY_NAME=tu_cloudinary_name
-CLOUDINARY_API_KEY=tu_api_key
-CLOUDINARY_API_SECRET=tu_api_secret
-
-# Rate Limiting
-RATE_LIMIT_TTL=60
-RATE_LIMIT_LIMIT=50
-
-# Puerto
-PORT=3000
-```
-
-### 4. Ejecutar la aplicación
-
-#### Desarrollo
-```bash
+cp .env.example .env
+npm ci
+npm run migration:run
 npm run start:dev
 ```
 
-#### Producción
+Los comandos deben ejecutarse desde la raíz de este repositorio, donde está
+`package.json`.
+
+## Scripts
+
 ```bash
 npm run build
-npm run start:prod
-```
-
-#### Con Docker
-```bash
-docker-compose up -d
-```
-
-## 📚 Documentación de la API
-
-Una vez que la aplicación esté ejecutándose, puedes acceder a la documentación interactiva de Swagger en:
-
-- **Local**: http://localhost:3000/api
-- **Producción**: https://ecommerce-flarano-herrera.onrender.com/api
-
-## 🔐 Autenticación
-
-La API utiliza JWT para autenticación. Para acceder a endpoints protegidos:
-
-1. **Registrarse**: `POST /auth/signup`
-2. **Iniciar sesión**: `POST /auth/signin`
-3. **Usar el token**: Incluir `Authorization: Bearer <token>` en las peticiones
-
-### Ejemplo de registro:
-```json
-POST /auth/signup
-{
-  "email": "usuario@ejemplo.com",
-  "password": "password123",
-  "name": "Usuario Ejemplo"
-}
-```
-
-## 📊 Endpoints principales
-
-### 🔐 Autenticación
-- `POST /auth/signup` - Registro de usuario
-- `POST /auth/signin` - Inicio de sesión
-
-### 👥 Usuarios
-- `GET /users` - Listar usuarios (Admin)
-- `GET /users/:id` - Obtener usuario por ID
-- `PUT /users/:id` - Actualizar usuario
-- `DELETE /users/:id` - Eliminar usuario (Admin)
-
-### 🛍️ Productos
-- `GET /products` - Listar productos (paginado)
-- `GET /products/:id` - Obtener producto por ID
-- `POST /products` - Crear producto (Admin)
-- `PUT /products/:id` - Actualizar producto (Admin)
-- `DELETE /products/:id` - Eliminar producto (Admin)
-- `GET /products/seeder` - Cargar productos de ejemplo
-
-### 📂 Categorías
-- `GET /categories` - Listar categorías
-- `GET /categories/:id` - Obtener categoría por ID
-- `GET /categories/seeder` - Cargar categorías de ejemplo
-
-### 🛒 Órdenes
-- `POST /orders` - Crear orden de compra
-- `GET /orders/:id` - Obtener orden por ID
-
-### 📁 Archivos
-- `POST /files/uploadImage/:id` - Subir imagen de producto (Admin)
-
-## 🗄️ Estructura de la base de datos
-
-### Entidades principales:
-- **Users**: Información de usuarios
-- **Products**: Catálogo de productos
-- **Categories**: Categorías de productos
-- **Orders**: Órdenes de compra
-- **OrderDetails**: Detalles de cada orden
-
-## 🚀 Deploy en Render
-
-### 1. Configurar base de datos en Neon
-1. Crear cuenta en [Neon](https://neon.tech)
-2. Crear nuevo proyecto
-3. Copiar la connection string
-
-### 2. Deploy en Render
-1. Conectar repositorio de GitHub
-2. Configurar variables de entorno:
-   - `DATABASE_URL`: URL de Neon
-   - `JWT_SECRET`: Tu secret JWT
-   - `DB_SYNC_ONCE`: `true` (solo para inicializar)
-3. Deploy automático
-
-### 3. Inicializar base de datos
-1. Activar `DB_SYNC_ONCE=true` en Render
-2. Redeploy (crea las tablas)
-3. Ejecutar seeds:
-   - `GET /categories/seeder`
-   - `GET /products/seeder`
-4. Desactivar `DB_SYNC_ONCE=false`
-5. Redeploy final
-
-## 🧪 Testing
-
-```bash
-# Tests unitarios
-npm run test
-
-# Tests e2e
+npm run lint
+npm run lint:fix
+npm test
 npm run test:e2e
-
-# Coverage
 npm run test:cov
+npm run migration:show
+npm run migration:run
+npm run migration:revert
 ```
 
-## 📝 Scripts disponibles
+## Módulos
 
-```bash
-npm run start          # Iniciar en producción
-npm run start:dev      # Iniciar en desarrollo
-npm run start:debug    # Iniciar en modo debug
-npm run build          # Compilar para producción
-npm run test           # Ejecutar tests
-npm run test:e2e       # Ejecutar tests e2e
-npm run test:cov       # Coverage de tests
-npm run lint           # Linter
-npm run format         # Formatear código
+- `auth`: registro, inicio de sesión y emisión de JWT.
+- `users`: perfiles, listado administrativo y eliminación protegida.
+- `products`: CRUD, filtros, ordenamiento y paginación.
+- `categories`: CRUD y protección de categorías en uso.
+- `orders`: compras transaccionales, stock e historial.
+- `files`: validación y carga de imágenes en Cloudinary.
+
+## Endpoints principales
+
+| Método | Ruta | Acceso |
+|---|---|---|
+| POST | `/auth/signup` | Público |
+| POST | `/auth/signin` | Público |
+| GET | `/products` | Público |
+| POST/PATCH/DELETE | `/products` | Administrador |
+| GET | `/categories` | Público |
+| POST/PATCH/DELETE | `/categories` | Administrador |
+| GET | `/orders` | Usuario autenticado |
+| POST | `/orders` | Usuario autenticado |
+| GET | `/orders/:id` | Propietario o administrador |
+| GET/PATCH | `/users/:id` | Propietario o administrador |
+| POST | `/files/uploadImage/:id` | Administrador |
+
+Swagger contiene los cuerpos, parámetros y respuestas completos.
+
+## Usuarios locales de prueba
+
+Con `SEED_TEST_USERS=true` y fuera de producción:
+
+- Usuario: `user@test.local` / `User123!`
+- Administrador: `admin@test.local` / `Admin123!`
+
+Nunca habilites este seeder en producción.
+
+## Estructura
+
+```text
+src/
+├── common/          # Seguridad, pipes, filtros y middleware
+├── config/          # Variables de entorno, TypeORM y rate limiting
+├── database/        # Entidades, migraciones y seeds
+├── modules/         # Auth, users, products, categories, orders y files
+├── app.module.ts
+└── main.ts
+test/                # Pruebas e2e
+docs/                # Arquitectura, base de datos y despliegue
 ```
 
-## 🔧 Configuración de desarrollo
+Consulta [configuración de base de datos](docs/database.md) y
+[despliegue](docs/deployment.md) para instrucciones adicionales.
 
-### Estructura del proyecto:
-```
-PM4BE-FLAranoHerrera/
-├── back/
-│   └── ecommerce-flarano-herrera/
-│       ├── src/
-│       │   ├── auth/              # Autenticación y autorización
-│       │   ├── categories/        # Gestión de categorías
-│       │   ├── config/           # Configuraciones
-│       │   ├── dto/              # Data Transfer Objects
-│       │   ├── entities/         # Entidades de TypeORM
-│       │   ├── files/            # Gestión de archivos
-│       │   ├── filters/          # Filtros de excepciones
-│       │   ├── middlewares/      # Middlewares personalizados
-│       │   ├── orders/           # Sistema de órdenes
-│       │   ├── pipes/            # Pipes de validación
-│       │   ├── products/         # Gestión de productos
-│       │   ├── seeds/            # Datos de ejemplo
-│       │   ├── types/            # Tipos TypeScript
-│       │   └── users/            # Gestión de usuarios
-│       ├── package.json
-│       ├── docker-compose.yml
-│       └── README.md
-└── README.md (este archivo)
-```
+## Seguridad
 
-## 🤝 Contribuir
+- Las credenciales viven exclusivamente en `.env` o en el proveedor.
+- `synchronize` permanece desactivado; el esquema se administra con migraciones.
+- Swagger está deshabilitado por defecto en producción.
+- CORS, rate limiting, JWT y validación global están configurados.
 
-1. Fork el proyecto
-2. Crear una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abrir un Pull Request
+## Licencia
 
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
-
-## 👨‍💻 Autor
-
-**Francisco Leonardo Arano Herrera**
-- GitHub: [@FLAranoHerrera](https://github.com/FLAranoHerrera)
-- LinkedIn: [Francisco Leonardo Arano Herrera](https://www.linkedin.com/in/francisco-leonardo-arano-herrera-540198169)
-- Email: aranoherrera92@gmail.com
-
-## 🙏 Agradecimientos
-
-- [NestJS](https://nestjs.com/) - Framework de Node.js
-- [TypeORM](https://typeorm.io/) - ORM para TypeScript
-- [Neon](https://neon.tech/) - Base de datos PostgreSQL serverless
-- [Render](https://render.com/) - Plataforma de deploy
-- [Cloudinary](https://cloudinary.com/) - Gestión de imágenes
-
----
-
-⭐ **¡Si te gusta este proyecto, no olvides darle una estrella!** ⭐
+[MIT](LICENSE)
