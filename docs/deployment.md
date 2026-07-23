@@ -3,7 +3,7 @@
 ## Variables obligatorias
 
 - `JWT_SECRET`: secreto aleatorio de al menos 32 caracteres.
-- `DATABASE_URL`: conexión PostgreSQL del proveedor.
+- `DATABASE_URL`: conexión PostgreSQL pooled de Neon con `sslmode=require`.
 - `DB_SSL=true`: para proveedores que exigen TLS.
 - `DB_MIGRATIONS_RUN=true`: aplica migraciones pendientes al arrancar.
 - `CORS_ORIGINS`: dominios permitidos separados por coma.
@@ -26,6 +26,9 @@ Configuración del servicio:
 - Dockerfile Path: `./Dockerfile`.
 - Docker Build Context: `.`.
 - Health Check Path: `/health`.
+
+La base de producción vive en Neon y se configura en Render mediante el secreto
+`DATABASE_URL`; el Blueprint no crea una base PostgreSQL en Render.
 
 Mantén `ENABLE_SWAGGER=false` y `SEED_TEST_USERS=false` en producción.
 

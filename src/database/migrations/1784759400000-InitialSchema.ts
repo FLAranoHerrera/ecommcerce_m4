@@ -4,6 +4,12 @@ export class InitialSchema1784759400000 implements MigrationInterface {
   name = 'InitialSchema1784759400000';
 
   async up(queryRunner: QueryRunner): Promise<void> {
+    // Una base heredada es adaptada por BaselineLegacySchema. En ese caso las
+    // tablas principales ya existen y no deben crearse nuevamente.
+    if (await queryRunner.hasTable('users')) {
+      return;
+    }
+
     await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
     await queryRunner.query(`
       CREATE TABLE "categories" (

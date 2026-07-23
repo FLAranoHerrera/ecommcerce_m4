@@ -16,9 +16,7 @@ services:
       - key: JWT_SECRET
         sync: false
       - key: DATABASE_URL
-        fromDatabase:
-          name: ecommerce-db
-          property: connectionString
+        sync: false
       - key: CLOUDINARY_NAME
         sync: false
       - key: CLOUDINARY_API_KEY
@@ -35,9 +33,3 @@ services:
         value: true
       - key: ENABLE_SWAGGER
         value: false
-
-databases:
-  - name: ecommerce-db
-    databaseName: ecommerce
-    user: ecommerce_user
-    plan: free
