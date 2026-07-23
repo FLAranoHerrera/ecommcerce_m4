@@ -23,13 +23,19 @@ export enum SortOrder {
 }
 
 export class ProductQueryDto {
-  @ApiPropertyOptional({ example: 1, default: 1, minimum: 1 })
+  @ApiPropertyOptional({ type: Number, example: 1, default: 1, minimum: 1 })
   @Type(() => Number)
   @IsInt()
   @Min(1)
   page = 1;
 
-  @ApiPropertyOptional({ example: 10, default: 5, minimum: 1, maximum: 100 })
+  @ApiPropertyOptional({
+    type: Number,
+    example: 10,
+    default: 5,
+    minimum: 1,
+    maximum: 100,
+  })
   @Type(() => Number)
   @IsInt()
   @Min(1)
