@@ -1,10 +1,12 @@
 services:
   - type: web
     name: ecommerce-flarano-herrera
-    env: node
+    runtime: docker
     plan: free
-    buildCommand: npm ci && npm run build
-    startCommand: npm run start:prod
+    branch: main
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    autoDeployTrigger: commit
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV

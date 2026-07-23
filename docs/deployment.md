@@ -14,14 +14,20 @@ funciona, pero la carga de imágenes responde `503`.
 
 ## Render
 
-El archivo `render.yaml` construye desde la raíz mediante:
+El servicio usa el runtime Docker de Render. El archivo `render.yaml` apunta al
+`Dockerfile` y al contexto de construcción ubicados en la raíz del repositorio.
+El `CMD` de la imagen inicia `node dist/main.js`; no configures Build Command,
+Start Command ni Docker Command en el panel.
 
-```bash
-npm ci && npm run build
-```
+Configuración del servicio:
 
-El proceso inicia con `npm run start:prod` y verifica `/health`. Mantén
-`ENABLE_SWAGGER=false` y `SEED_TEST_USERS=false` en producción.
+- Branch: `main`.
+- Root Directory: vacío.
+- Dockerfile Path: `./Dockerfile`.
+- Docker Build Context: `.`.
+- Health Check Path: `/health`.
+
+Mantén `ENABLE_SWAGGER=false` y `SEED_TEST_USERS=false` en producción.
 
 ## Docker
 
