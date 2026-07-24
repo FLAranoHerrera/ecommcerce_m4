@@ -22,6 +22,7 @@ export class OrderProductDto {
   id: string;
 
   @ApiPropertyOptional({
+    type: Number,
     description: 'Cantidad solicitada; si se omite se utiliza 1',
     example: 2,
     minimum: 1,
